@@ -98,8 +98,44 @@ export const signup = async (req: Request, res: Response):Promise<any> => {
   }
 };
 
-export const signin = (req: Request, res: Response) => {
-  res.json({
-    message: "Hi From SignIn Controller",
-  });
+export const signin = async(req: Request, res: Response) => {
+
+  const{email,password} = req.body;
+  if(!email || !password || email ==="" || password ===""){
+    res.json({
+      message:"All The Fields Are Required"
+    })
+    return 
+  }
+  try {
+    const user = await prisma.user.findUnique({
+      where:{
+        email
+      }
+    })
+  
+    if(!user){
+      res.json({
+        message: "User Not Found Try Signing Up"
+      })
+      return
+    }
+    const comparedpassword = await bcrypt.compare(password,user.password)
+    if(!comparedpassword){
+      res.json({
+        message: "Something Went Wrong"
+      })
+      return
+    }
+    const token = jwt.sign({userid:user.user_id},JWT_USER_SECRET,{expiresIn:"1hr"})
+    res.json({
+      message: "user signedin successfully",
+      token
+    })  
+  } catch (error) {
+    res.json({
+      message: "Error While Signing Up",
+      err: error
+    })
+  }
 };
