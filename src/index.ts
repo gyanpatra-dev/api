@@ -4,11 +4,19 @@ import express from 'express';
 import cors from 'cors'
 const app = express();
 
+import path from 'path';
+
+console.log("User routes resolved path:", path.resolve('./routes/user.routes.ts'));
+console.log("Auth routes resolved path:", path.resolve('./routes/auth.routes.ts'));
+
+
+
 
 //files import
 
-import router from 'routes/user.routes';
-import authrouter from 'routes/auth.routes';
+import router from './routes/user.routes'; // Explicit relative path
+import authrouter from './routes/auth.routes'; // Explicit relative path
+
 
 
 //middlewares
