@@ -11,8 +11,8 @@ const path_1 = __importDefault(require("path"));
 console.log("User routes resolved path:", path_1.default.resolve('./routes/user.routes.ts'));
 console.log("Auth routes resolved path:", path_1.default.resolve('./routes/auth.routes.ts'));
 //files import
-const user_routes_1 = __importDefault(require("./routes/user.routes")); // Explicit relative path
-const auth_routes_1 = __importDefault(require("./routes/auth.routes")); // Explicit relative path
+const auth_routes_1 = __importDefault(require("./routes/auth.routes"));
+const user_routes_1 = __importDefault(require("./routes/user.routes"));
 //middlewares
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());

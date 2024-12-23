@@ -14,8 +14,9 @@ console.log("Auth routes resolved path:", path.resolve('./routes/auth.routes.ts'
 
 //files import
 
-import router from './routes/user.routes'; // Explicit relative path
-import authrouter from './routes/auth.routes'; // Explicit relative path
+import authrouter from './routes/auth.routes';
+import router from './routes/user.routes';
+
 
 
 
