@@ -8,6 +8,7 @@ const app = express();
 //files import
 
 import router from './routes/user.routes';
+import authrouter from './routes/auth.routes';
 
 
 //middlewares
@@ -19,7 +20,8 @@ app.use(express.json());
 
 // routes
 
-app.use("/user",router)
+app.use("/api/user",router);
+app.use("/api/user/auth",authrouter);
 
 
 
