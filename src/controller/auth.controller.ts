@@ -37,6 +37,8 @@ export const signup = async (req: Request, res: Response):Promise<any> => {
   });
 
   const parseddata = requiredbody.safeParse(req.body);
+  console.log(req.body)
+  console.log(parseddata)
   if (!parseddata.success) {
      res.status(400).json({
       message: "Bad Request Incorrect Input Format",
@@ -60,16 +62,22 @@ export const signup = async (req: Request, res: Response):Promise<any> => {
       return ;
     }
 
+    
     const hashedpassword = await bcrypt.hash(password, 10);
+    console.log(hashedpassword)
     const newuser = await prisma.user.create({
+     
       data: {
         email,
         password: hashedpassword,
         name,
-        branch,
+        // branch,
         semester,
       },
+      
     });
+
+    console.log(newuser)
 
     const token = jwt.sign({ userId: newuser.user_id }, JWT_USER_SECRET, {
       expiresIn: "1h",
