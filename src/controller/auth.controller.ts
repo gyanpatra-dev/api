@@ -16,7 +16,7 @@ const prisma = new PrismaClient();
 
 // controllers
 
-export const signup = async (req: Request, res: Response) => {
+export const signup = async (req: Request, res: Response):Promise<any> => {
   const requiredbody = z.object({
     email: z.string().email(),
     password: z.string().min(4).max(10),
@@ -38,10 +38,11 @@ export const signup = async (req: Request, res: Response) => {
 
   const parseddata = requiredbody.safeParse(req.body);
   if (!parseddata.success) {
-    return res.status(400).json({
+     res.status(400).json({
       message: "Bad Request Incorrect Input Format",
       error: parseddata.error,
     });
+    return 
   }
 
   const { email, password, name, branch, semester } = req.body;
@@ -53,9 +54,10 @@ export const signup = async (req: Request, res: Response) => {
     });
 
     if (existinguser) {
-      return res.status(409).json({
+        res.status(409).json({
         message: "Email Is Already Regestered",
       });
+      return ;
     }
 
     const hashedpassword = await bcrypt.hash(password, 10);
@@ -73,16 +75,18 @@ export const signup = async (req: Request, res: Response) => {
       expiresIn: "1h",
     });
 
-    return res.status(201).json({
+    res.status(201).json({
       message: "User Successfully Created",
       newuser: omit(newuser, ["password"]),
       token
     });
+    return  null;
   } catch (error) {
-    return res.status(501).json({
+     res.status(501).json({
       message: "Error While Signing Up",
       err: error,
     });
+    return 
   }
 };
 

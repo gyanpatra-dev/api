@@ -7,8 +7,8 @@ const app = express();
 
 //files import
 
-import router from './routes/user.routes.ts';
-import authrouter from './routes/auth.routes.ts';
+import router from './routes/user.routes';
+import authrouter from './routes/auth.routes';
 
 
 //middlewares
