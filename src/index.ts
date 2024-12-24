@@ -29,6 +29,12 @@ app.use(express.json());
 
 // routes
 
+app.get("/",(req,res)=>{
+    res.json({
+        message: "Welcome To IITKIRBA Api"
+    })
+})
+
 app.use("/api/user",router);
 app.use("/api/user/auth",authrouter);
 
