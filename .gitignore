@@ -11,12 +11,14 @@ yarn-error.log*
 # Environment variables
 .env
 
-# TypeScript build output
-dist/
+# TypeScript build output (exclude locally but include in deployment)
+!dist/
 
-# Prisma files
+# Prisma files (ensure generated files are included)
+!prisma/generated/
+
+# Prisma-specific environment variables
 prisma/.env
-prisma/generated/
 
 # System files
 .DS_Store
