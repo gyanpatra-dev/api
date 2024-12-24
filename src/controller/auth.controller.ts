@@ -12,7 +12,7 @@ const JWT_USER_SECRET =
 
 // instances
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
 // controllers
 
