@@ -1,4 +1,13 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -15,7 +24,7 @@ const JWT_USER_SECRET = process.env.JWT_USER_SECRET || "oweqvoqv brluigreuibvuib
 // instances
 const prisma = new client_1.PrismaClient();
 // controllers
-const signup = async (req, res) => {
+const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const requiredbody = zod_1.z.object({
         email: zod_1.z.string().email(),
         password: zod_1.z.string().min(4).max(10),
@@ -46,7 +55,7 @@ const signup = async (req, res) => {
     }
     const { email, password, name, branch, semester } = req.body;
     try {
-        const existinguser = await prisma.user.findUnique({
+        const existinguser = yield prisma.user.findUnique({
             where: {
                 email,
             },
@@ -57,9 +66,9 @@ const signup = async (req, res) => {
             });
             return;
         }
-        const hashedpassword = await bcrypt_1.default.hash(password, 10);
+        const hashedpassword = yield bcrypt_1.default.hash(password, 10);
         console.log(hashedpassword);
-        const newuser = await prisma.user.create({
+        const newuser = yield prisma.user.create({
             data: {
                 email,
                 password: hashedpassword,
@@ -86,9 +95,9 @@ const signup = async (req, res) => {
         });
         return;
     }
-};
+});
 exports.signup = signup;
-const signin = async (req, res) => {
+const signin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = req.body;
     if (!email || !password || email === "" || password === "") {
         res.json({
@@ -97,7 +106,7 @@ const signin = async (req, res) => {
         return;
     }
     try {
-        const user = await prisma.user.findUnique({
+        const user = yield prisma.user.findUnique({
             where: {
                 email
             }
@@ -108,7 +117,7 @@ const signin = async (req, res) => {
             });
             return;
         }
-        const comparedpassword = await bcrypt_1.default.compare(password, user.password);
+        const comparedpassword = yield bcrypt_1.default.compare(password, user.password);
         if (!comparedpassword) {
             res.json({
                 message: "Something Went Wrong"
@@ -127,5 +136,5 @@ const signin = async (req, res) => {
             err: error
         });
     }
-};
+});
 exports.signin = signin;
