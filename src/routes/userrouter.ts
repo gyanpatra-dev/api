@@ -2,9 +2,9 @@ import { Router } from "express";
 const router =  Router()
 
 
-import { hello } from "../controller/user.controller";
+import { getusers } from "../controller/user.controller";
 
 
-router.get("/",hello)
+router.get("/",getusers)
 
 export default router

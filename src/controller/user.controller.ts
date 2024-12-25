@@ -1,8 +1,17 @@
-
+import { PrismaClient } from "@prisma/client"
 import { Request, Response } from "express"
 
-export const hello = (req:Request,res: Response)=>{
-        res.json({
-            message: "Hello From Controller"
-        })
+const prisma = new PrismaClient()
+
+export const getusers = async(req:Request,res: Response)=>{
+
+    const users  = await prisma.user.findFirst({
+        select:{
+            email: true,
+            name: true
+        }
+    })
+
+    console.log(users)
+        
 }
