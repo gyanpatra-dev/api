@@ -7,9 +7,6 @@ require('dotenv').config();
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const app = (0, express_1.default)();
-const path_1 = __importDefault(require("path"));
-console.log("User routes resolved path:", path_1.default.resolve('./routes/user.routes.ts'));
-console.log("Auth routes resolved path:", path_1.default.resolve('./routes/auth.routes.ts'));
 //files import
 const userrouter_1 = __importDefault(require("./routes/userrouter"));
 const authrouter_1 = __importDefault(require("./routes/authrouter"));
@@ -17,6 +14,11 @@ const authrouter_1 = __importDefault(require("./routes/authrouter"));
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 // routes
+app.get("/", (req, res) => {
+    res.json({
+        message: "Welcome To IITKIRBA Api"
+    });
+});
 app.use("/api/user", userrouter_1.default);
 app.use("/api/user/auth", authrouter_1.default);
 app.listen(process.env.PORT || 6000, () => {
