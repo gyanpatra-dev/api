@@ -9,21 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getadmins = exports.getusers = void 0;
+exports.getadmins = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
-const getusers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const users = yield prisma.user.findMany({
-        select: {
-            email: true,
-            name: true
-        }
-    });
-    res.json({
-        users: users
-    });
-});
-exports.getusers = getusers;
 const getadmins = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const admins = prisma.user.findMany({
         where: {

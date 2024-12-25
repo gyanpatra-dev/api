@@ -1,10 +1,10 @@
 import { Router } from "express";
-const userrouter =  Router()
+const adminrouter =  Router()
 
 
 import { getusers } from "../controller/user.controller";
 
 
-userrouter.get("/",getusers)
+adminrouter.get("/",getusers)
 
-export default userrouter
+export default adminrouter

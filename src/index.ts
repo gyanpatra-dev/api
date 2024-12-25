@@ -10,8 +10,9 @@ const app = express();
 
 //files import
 
-import router from './routes/userrouter';
+import userrouter from './routes/userrouter';
 import authrouter from './routes/authrouter';
+import adminrouter from './routes/admin.router';
 
 
 
@@ -31,7 +32,8 @@ app.get("/",(req,res)=>{
     })
 })
 
-app.use("/api/user",router);
+app.use("/api/user",userrouter);
+app.use("api/admin",adminrouter)
 app.use("/api/user/auth",authrouter);
 
 
