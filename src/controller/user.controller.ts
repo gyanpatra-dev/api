@@ -12,6 +12,8 @@ export const getusers = async(req:Request,res: Response)=>{
         }
     })
 
-    console.log(users)
+    res.json({
+        users:users
+    })
         
 }
