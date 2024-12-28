@@ -9,9 +9,34 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createSubjectMany = exports.createSubject = void 0;
+exports.createSubjectMany = exports.createSubject = exports.getsubjects = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
+const getsubjects = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { yearId, branchname } = req.body;
+    if (!yearId || !branchname || yearId === "" || branchname === "") {
+        res.status(502).json({
+            message: "All Fields Are Required"
+        });
+    }
+    try {
+        const requireddata = yield prisma.subject.findMany({
+            where: {
+                yearId,
+                branchname
+            }
+        });
+        res.status(200).json({
+            requireddata
+        });
+    }
+    catch (error) {
+        res.status(404).json({
+            error
+        });
+    }
+});
+exports.getsubjects = getsubjects;
 const createSubject = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { yearId, subjectname, branchname } = req.body;
     if (!yearId || !subjectname || !branchname || yearId === "" || subjectname === "" || branchname === "") {

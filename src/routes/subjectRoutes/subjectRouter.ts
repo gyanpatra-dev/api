@@ -1,11 +1,12 @@
 import { Router } from "express";
-import { createSubject, createSubjectMany } from "../../controller/SubjectController/subject.controller";
+import { createSubject, createSubjectMany, getsubjects } from "../../controller/SubjectController/subject.controller";
 const subjectrouter = Router();
 
 
 subjectrouter.get("");
 subjectrouter.post("/create",createSubject);
 subjectrouter.post("/createmany",createSubjectMany);
+subjectrouter.get("/data",getsubjects)
 
 
 

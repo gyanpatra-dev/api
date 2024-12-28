@@ -1,8 +1,34 @@
-import { Request, Response } from "express";
+import {  Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 
 const prisma  = new PrismaClient();
 
+
+export const getsubjects = async(req: Request, res: Response)=>{
+    const {yearId,branchname} = req.body
+    if(!yearId || !branchname || yearId ==="" ||branchname ===""){
+        res.status(502).json({
+            message: "All Fields Are Required"
+        })
+    }
+    try {
+        const requireddata = await prisma.subject.findMany({
+            where:{
+                yearId,
+                branchname
+            }
+        })
+        res.status(200).json({
+            requireddata
+        })
+    } catch (error) {
+        res.status(404).json({
+            error
+        })
+        
+    }
+
+}
 
 export const createSubject = async(req:Request, res: Response)=>{
     const{yearId,subjectname,branchname}=  req.body

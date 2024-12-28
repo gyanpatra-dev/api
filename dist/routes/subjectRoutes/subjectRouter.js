@@ -6,4 +6,5 @@ const subjectrouter = (0, express_1.Router)();
 subjectrouter.get("");
 subjectrouter.post("/create", subject_controller_1.createSubject);
 subjectrouter.post("/createmany", subject_controller_1.createSubjectMany);
+subjectrouter.get("/data", subject_controller_1.getsubjects);
 exports.default = subjectrouter;
