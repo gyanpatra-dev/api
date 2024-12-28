@@ -13,7 +13,7 @@ const app = express();
 import userrouter from './routes/UserRoutes/userrouter';
 import authrouter from './routes/AuthRoutes/authrouter';
 import adminrouter from './routes/AdminRoutes/admin.router';
-
+import branchrouter from './routes/BranchRoutes/branchroute';
 
 
 
@@ -35,6 +35,7 @@ app.get("/",(req,res)=>{
 app.use("/api/user",userrouter);
 app.use("api/admin",adminrouter)
 app.use("/api/user/auth",authrouter);
+app.use("/api/branch",branchrouter)
 
 
 

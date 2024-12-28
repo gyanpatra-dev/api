@@ -11,6 +11,7 @@ const app = (0, express_1.default)();
 const userrouter_1 = __importDefault(require("./routes/UserRoutes/userrouter"));
 const authrouter_1 = __importDefault(require("./routes/AuthRoutes/authrouter"));
 const admin_router_1 = __importDefault(require("./routes/AdminRoutes/admin.router"));
+const branchroute_1 = __importDefault(require("./routes/BranchRoutes/branchroute"));
 //middlewares
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
@@ -23,6 +24,7 @@ app.get("/", (req, res) => {
 app.use("/api/user", userrouter_1.default);
 app.use("api/admin", admin_router_1.default);
 app.use("/api/user/auth", authrouter_1.default);
+app.use("/api/branch", branchroute_1.default);
 app.listen(process.env.PORT || 6000, () => {
     console.log(`server is running at http://localhost:${process.env.PORT}`);
 });
