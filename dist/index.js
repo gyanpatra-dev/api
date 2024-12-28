@@ -8,9 +8,9 @@ const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const app = (0, express_1.default)();
 //files import
-const userrouter_1 = __importDefault(require("./routes/userrouter"));
-const authrouter_1 = __importDefault(require("./routes/authrouter"));
-const admin_router_1 = __importDefault(require("./routes/admin.router"));
+const userrouter_1 = __importDefault(require("./routes/UserRoutes/userrouter"));
+const authrouter_1 = __importDefault(require("./routes/AuthRoutes/authrouter"));
+const admin_router_1 = __importDefault(require("./routes/AdminRoutes/admin.router"));
 //middlewares
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
