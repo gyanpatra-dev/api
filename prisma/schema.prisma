@@ -25,10 +25,12 @@ model SavedPost {
 }
 
 model Branch {
-  branch_id   Int         @id @default(autoincrement())
-  userid      Int?        @unique
-  user        User?       @relation(fields: [userid], references: [user_id], onDelete: Cascade, onUpdate: Cascade)
-  semesters   Semester[]
+  branch_id        Int         @id @default(autoincrement())
+  userid           Int?        @unique
+  user             User?       @relation(fields: [userid], references: [user_id], onDelete: Cascade, onUpdate: Cascade)
+  semesters        Semester[]
+  displayimage     String
+  branchimage      String
 }
 
 model Semester {
