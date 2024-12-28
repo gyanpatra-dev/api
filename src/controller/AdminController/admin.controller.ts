@@ -15,3 +15,5 @@ export const getadmins = async(req: Request,res: Response)=>{
 
     })
 }
+
+

@@ -1,8 +1,8 @@
 // imports
 
 import { Router } from "express";
-import { signup } from "../controller/auth.controller";
-import { signin } from "../controller/auth.controller";
+import { signup } from "../../controller/AuthController/auth.controller";
+import { signin } from "../../controller/AuthController/auth.controller";
 
 
 // instances

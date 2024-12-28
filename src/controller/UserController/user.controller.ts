@@ -8,9 +8,19 @@ export const getusers = async(req:Request,res: Response)=>{
     const users  = await prisma.user.findMany({
         select:{
             email: true,
-            name: true
+            name: true,
+            branch:true,
+            role:true,
         }
     })
+
+    if(!users){
+        res.json({
+            message: "Users Not Found"
+
+        })
+        return ;
+    }
 
     res.json({
         users:users

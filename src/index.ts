@@ -10,9 +10,9 @@ const app = express();
 
 //files import
 
-import userrouter from './routes/userrouter';
-import authrouter from './routes/authrouter';
-import adminrouter from './routes/admin.router';
+import userrouter from './routes/UserRoutes/userrouter';
+import authrouter from './routes/AuthRoutes/authrouter';
+import adminrouter from './routes/AdminRoutes/admin.router';
 
 
 
