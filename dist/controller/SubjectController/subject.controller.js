@@ -14,22 +14,19 @@ const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const getsubjects = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { yearId, branchname } = req.body;
-    // Validation
     if (!yearId || !branchname || yearId === "" || branchname === "") {
         res.status(400).json({
             message: "All Fields Are Required",
         });
-        return; // Prevent further execution
+        return;
     }
     try {
-        // Fetch subjects from the database
         const requireddata = yield prisma.subject.findMany({
             where: {
                 yearId,
                 branchname,
             },
         });
-        // Send the response
         res.status(200).json({
             subjects: requireddata,
         });

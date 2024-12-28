@@ -12,6 +12,7 @@ enum Role {
   ADMIN
 }
 
+
 model User {
   user_id    Int       @id @default(autoincrement())
   name       String
@@ -61,11 +62,13 @@ model Pyq {
   subjectId Int
   subject   Subject @relation(fields: [subjectId], references: [subject_id], onDelete: Cascade, onUpdate: Cascade)
   links     String
+  pyqtype   String  @default("MID")
+
 }
 
 model Notes {
   notes_id  Int     @id @default(autoincrement())
   subjectId Int
   subject   Subject @relation(fields: [subjectId], references: [subject_id], onDelete: Cascade, onUpdate: Cascade)
-  link      String
+  link      String  
 }

@@ -6,16 +6,16 @@ const prisma  = new PrismaClient();
 export const getsubjects = async (req: Request, res: Response) => {
     const { yearId, branchname } = req.body;
 
-    // Validation
+  
     if (!yearId || !branchname || yearId === "" || branchname === "") {
         res.status(400).json({
             message: "All Fields Are Required",
         });
-        return; // Prevent further execution
+        return; 
     }
 
     try {
-        // Fetch subjects from the database
+        
         const requireddata = await prisma.subject.findMany({
             where: {
                 yearId,
@@ -23,7 +23,7 @@ export const getsubjects = async (req: Request, res: Response) => {
             },
         });
 
-        // Send the response
+    
         res.status(200).json({
             subjects: requireddata,
         });
