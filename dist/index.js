@@ -15,6 +15,7 @@ const branchroute_1 = __importDefault(require("./routes/BranchRoutes/branchroute
 const yearrouter_1 = __importDefault(require("./routes/yearRoutes/yearrouter"));
 const subjectRouter_1 = __importDefault(require("./routes/subjectRoutes/subjectRouter"));
 const pyqroutes_1 = __importDefault(require("./routes/pyqRoutes/pyqroutes"));
+const notesrouter_1 = __importDefault(require("./routes/NotesRoutes/notesrouter"));
 //middlewares
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
@@ -31,6 +32,7 @@ app.use("/api/branch", branchroute_1.default);
 app.use("/api/year", yearrouter_1.default);
 app.use("/api/subject", subjectRouter_1.default);
 app.use("/api/pyq", pyqroutes_1.default);
+app.use("/api/notes", notesrouter_1.default);
 app.listen(process.env.PORT || 6000, () => {
     console.log(`server is running at http://localhost:${process.env.PORT}`);
 });
