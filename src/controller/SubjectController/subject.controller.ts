@@ -3,32 +3,38 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma  = new PrismaClient();
 
+export const getsubjects = async (req: Request, res: Response) => {
+    const { yearId, branchname } = req.body;
 
-export const getsubjects = async(req: Request, res: Response)=>{
-    const {yearId,branchname} = req.body
-    if(!yearId || !branchname || yearId ==="" ||branchname ===""){
-        res.status(502).json({
-            message: "All Fields Are Required"
-        })
+    // Validation
+    if (!yearId || !branchname || yearId === "" || branchname === "") {
+        res.status(400).json({
+            message: "All Fields Are Required",
+        });
+        return; // Prevent further execution
     }
+
     try {
+        // Fetch subjects from the database
         const requireddata = await prisma.subject.findMany({
-            where:{
+            where: {
                 yearId,
-                branchname
-            }
-        })
-        res.status(200).json({
-            requireddata
-        })
-    } catch (error) {
-        res.status(404).json({
-            error
-        })
-        
-    }
+                branchname,
+            },
+        });
 
-}
+        // Send the response
+        res.status(200).json({
+            subjects: requireddata,
+        });
+    } catch (error) {
+        console.error("Error fetching subjects:", error);
+        res.status(500).json({
+            error: "Failed to fetch subjects",
+        });
+    }
+};
+
 
 export const createSubject = async(req:Request, res: Response)=>{
     const{yearId,subjectname,branchname}=  req.body
