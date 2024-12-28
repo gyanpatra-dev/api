@@ -47,11 +47,13 @@ model Year {
 }
 
 model Subject {
-  subject_id Int     @id @default(autoincrement())
-  yearId     Int
-  year       Year    @relation(fields: [yearId], references: [year_id], onDelete: Cascade, onUpdate: Cascade)
-  pyqs       Pyq[]
-  notes      Notes[]
+  subject_id            Int     @id @default(autoincrement())
+  yearId                Int
+  year                  Year    @relation(fields: [yearId], references: [year_id], onDelete: Cascade, onUpdate: Cascade)
+  pyqs                  Pyq[]
+  notes                 Notes[]
+  subjectname           String
+  branchname            String
 }
 
 model Pyq {

@@ -15,6 +15,7 @@ import authrouter from './routes/AuthRoutes/authrouter';
 import adminrouter from './routes/AdminRoutes/admin.router';
 import branchrouter from './routes/BranchRoutes/branchroute';
 import yearrouter from './routes/yearRoutes/yearrouter';
+import subjectrouter from './routes/subjectRoutes/subjectRouter';
 
 
 
@@ -37,7 +38,8 @@ app.use("/api/user",userrouter);
 app.use("api/admin",adminrouter)
 app.use("/api/user/auth",authrouter);
 app.use("/api/branch",branchrouter);
-app.use("/api/year",yearrouter)
+app.use("/api/year",yearrouter);
+app.use("/api/subject",subjectrouter)
 
 
 

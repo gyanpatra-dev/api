@@ -1,0 +1,9 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const subject_controller_1 = require("../../controller/SubjectController/subject.controller");
+const subjectrouter = (0, express_1.Router)();
+subjectrouter.get("");
+subjectrouter.post("/create", subject_controller_1.createSubject);
+subjectrouter.post("/createmany", subject_controller_1.createSubjectMany);
+exports.default = subjectrouter;
