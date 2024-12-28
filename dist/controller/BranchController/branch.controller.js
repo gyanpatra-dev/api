@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createbranch = exports.getallbranch = void 0;
+exports.updatebranch = exports.createbranch = exports.getallbranch = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const getallbranch = (req, res) => {
@@ -54,3 +54,33 @@ const createbranch = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     }
 });
 exports.createbranch = createbranch;
+const updatebranch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { branchimage, displayimage, branchname } = req.body;
+    if (!branchname || !branchimage || !displayimage || branchname === "" || displayimage === "" || branchimage === "") {
+        res.json({
+            message: "ALL Fields Are Required"
+        });
+        return;
+    }
+    try {
+        const updatedbranch = yield prisma.branch.update({
+            where: {
+                branchname
+            },
+            data: {
+                branchimage,
+                displayimage
+            }
+        });
+        res.json({
+            updatedBranch: updatedbranch
+        });
+    }
+    catch (error) {
+        res.json({
+            err: error
+        });
+        return;
+    }
+});
+exports.updatebranch = updatebranch;

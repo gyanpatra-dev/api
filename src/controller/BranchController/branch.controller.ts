@@ -47,3 +47,46 @@ export const createbranch = async (req: Request, res: Response) => {
     return;
   }
 };
+
+
+
+
+interface updateifo{
+    branchimage:string,
+    displayimage:string,
+    branchname:string
+
+}
+
+
+
+export const updatebranch = async(req: Request,res: Response)=>{
+    const{branchimage,displayimage,branchname}:updateifo=req.body
+    if(!branchname || ! branchimage || ! displayimage || branchname ==="" || displayimage ===""|| branchimage===""){
+        res.json({
+            message: "ALL Fields Are Required"
+        })
+        return ;
+    }
+    try {
+        const updatedbranch  = await prisma.branch.update({
+            where:{
+                branchname
+            },
+            data:{
+                branchimage,
+                displayimage
+            }
+        })
+        res.json({
+            updatedBranch: updatedbranch
+        })
+    } catch (error) {
+        res.json({
+            err: error
+        })
+        return ;
+    }
+
+
+}
