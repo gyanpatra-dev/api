@@ -10,7 +10,9 @@ export const getallbranch = (req: Request, res: Response) => {
 };
 
 export const createbranch = async (req: Request, res: Response) => {
+   
   const { branchname, displayimage, branchimage } = req.body;
+  
   if (
     !branchname ||
     !displayimage ||
