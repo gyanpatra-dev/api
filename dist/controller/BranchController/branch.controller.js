@@ -10,13 +10,47 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createbranch = exports.getallbranch = void 0;
+const client_1 = require("@prisma/client");
+const prisma = new client_1.PrismaClient();
 const getallbranch = (req, res) => {
     res.json({
-        message: "Hello From Brach controller"
+        message: "Hello From Brach controller",
     });
 };
 exports.getallbranch = getallbranch;
 const createbranch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const {};
+    const { branchname, displayimage, branchimage } = req.body;
+    if (!branchname ||
+        !displayimage ||
+        !branchimage ||
+        branchname === "" ||
+        branchimage === "" ||
+        displayimage === "") {
+        res.json({
+            message: " All fields are required",
+        });
+        return;
+    }
+    try {
+        const newbranch = yield prisma.branch.create({
+            data: {
+                branchname,
+                displayimage,
+                branchimage,
+            },
+        });
+        if (newbranch) {
+            res.json({
+                newbranch: newbranch,
+            });
+        }
+    }
+    catch (error) {
+        res.json({
+            error: error,
+        });
+        console.log(error);
+        return;
+    }
 });
 exports.createbranch = createbranch;
