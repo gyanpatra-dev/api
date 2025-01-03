@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { createyear } from "../../controller/yearController/year.controller";
+import { createyear, getallyear } from "../../controller/yearController/year.controller";
 const yearrouter = Router()
 
-yearrouter.get("/",);
+yearrouter.get("/",getallyear);
 yearrouter.post("/create",createyear)
 
 
