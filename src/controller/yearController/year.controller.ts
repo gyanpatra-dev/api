@@ -8,8 +8,8 @@ const prisma = new PrismaClient();
 
 
 export const getallyear = async(req: Request,res: Response)=>{
-    const{branch} = req.body
-    if(!branch || branch ===""){
+    const{branchId} = req.body
+    if(!branchId || branchId ===""){
         res.json({
             message: "All Fields Are Required"
         })
@@ -17,7 +17,7 @@ export const getallyear = async(req: Request,res: Response)=>{
     try {
         const requiredyear = await prisma.year.findMany({
             where:{
-                branch
+                branchId
             }
         })
 
