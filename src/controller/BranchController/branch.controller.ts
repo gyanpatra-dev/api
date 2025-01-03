@@ -3,10 +3,24 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export const getallbranch = (req: Request, res: Response) => {
-  res.json({
-    message: "Hello From Brach controller",
-  });
+export const getallbranch = async(req: Request, res: Response) => {
+  try {
+    const branches  = await prisma.branch.findMany();
+    if(!branches){
+      res.json({
+        message: "No Branch Found !"
+      })
+    }
+    res.json({
+      branches:branches,
+      message: "Branch Fetched Successfully"
+    })
+  } catch (error) {
+    res.json({
+      error
+    })
+    
+  }
 };
 
 export const createbranch = async (req: Request, res: Response) => {
