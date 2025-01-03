@@ -12,11 +12,25 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.updatebranch = exports.createbranch = exports.getallbranch = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
-const getallbranch = (req, res) => {
-    res.json({
-        message: "Hello From Brach controller",
-    });
-};
+const getallbranch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const branches = yield prisma.branch.findMany();
+        if (!branches) {
+            res.json({
+                message: "No Branch Found !"
+            });
+        }
+        res.json({
+            branches: branches,
+            message: "Branch Fetched Successfully"
+        });
+    }
+    catch (error) {
+        res.json({
+            error
+        });
+    }
+});
 exports.getallbranch = getallbranch;
 const createbranch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { branchname, displayimage, branchimage } = req.body;

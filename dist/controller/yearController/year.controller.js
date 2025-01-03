@@ -14,8 +14,8 @@ const client_1 = require("@prisma/client");
 // instances
 const prisma = new client_1.PrismaClient();
 const getallyear = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { branch } = req.body;
-    if (!branch || branch === "") {
+    const { branchId } = req.body;
+    if (!branchId || branchId === "") {
         res.json({
             message: "All Fields Are Required"
         });
@@ -23,7 +23,7 @@ const getallyear = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     try {
         const requiredyear = yield prisma.year.findMany({
             where: {
-                branch
+                branchId
             }
         });
         res.json({
