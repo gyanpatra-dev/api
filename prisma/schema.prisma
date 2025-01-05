@@ -36,7 +36,6 @@ model Branch {
   user         User?    @relation(fields: [userid], references: [user_id], onDelete: Cascade, onUpdate: Cascade)
   year         Year[]   @relation("BranchYear")
   displayimage String
-  branchimage  String
   branchname   String   @unique
 }
 

@@ -3,36 +3,32 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export const getallbranch = async(req: Request, res: Response) => {
+export const getallbranch = async (req: Request, res: Response) => {
   try {
-    const branches  = await prisma.branch.findMany();
-    if(!branches){
+    const branches = await prisma.branch.findMany();
+    if (!branches) {
       res.json({
-        message: "No Branch Found !"
-      })
+        message: "No Branch Found !",
+      });
     }
     res.json({
-      branches:branches,
-      message: "Branch Fetched Successfully"
-    })
+      branches: branches,
+      message: "Branch Fetched Successfully",
+    });
   } catch (error) {
     res.json({
-      error
-    })
-    
+      error,
+    });
   }
 };
 
 export const createbranch = async (req: Request, res: Response) => {
-   
-  const { branchname, displayimage, branchimage } = req.body;
-  
+  const { branchname, displayimage } = req.body;
+
   if (
     !branchname ||
     !displayimage ||
-    !branchimage ||
     branchname === "" ||
-    branchimage === "" ||
     displayimage === ""
   ) {
     res.json({
@@ -40,12 +36,25 @@ export const createbranch = async (req: Request, res: Response) => {
     });
     return;
   }
+  const isbranchexist = await prisma.branch.findUnique({
+    where:{
+      branchname
+    }
+  })
+
+  if(isbranchexist){
+    res.status(400).json({
+      message: "Branch Already Exists",
+    })
+    return ;
+  }
+
   try {
     const newbranch = await prisma.branch.create({
       data: {
         branchname,
         displayimage,
-        branchimage,
+        
       },
     });
     if (newbranch) {
@@ -54,7 +63,7 @@ export const createbranch = async (req: Request, res: Response) => {
       });
     }
   } catch (error) {
-    res.json({
+    res.status(200).json({
       error: error,
     });
     console.log(error);
@@ -62,45 +71,44 @@ export const createbranch = async (req: Request, res: Response) => {
   }
 };
 
-
-
-
-interface updateifo{
-    branchimage:string,
-    displayimage:string,
-    branchname:string
-
+interface updateifo {
+  branchimage: string;
+  displayimage: string;
+  branchname: string;
 }
 
-
-
-export const updatebranch = async(req: Request,res: Response)=>{
-    const{branchimage,displayimage,branchname}:updateifo=req.body
-    if(!branchname || ! branchimage || ! displayimage || branchname ==="" || displayimage ===""|| branchimage===""){
-        res.json({
-            message: "ALL Fields Are Required"
-        })
-        return ;
-    }
-    try {
-        const updatedbranch  = await prisma.branch.update({
-            where:{
-                branchname
-            },
-            data:{
-                branchimage,
-                displayimage
-            }
-        })
-        res.json({
-            updatedBranch: updatedbranch
-        })
-    } catch (error) {
-        res.json({
-            err: error
-        })
-        return ;
-    }
-
-
-}
+export const updatebranch = async (req: Request, res: Response) => {
+  const { branchimage, displayimage, branchname }: updateifo = req.body;
+  if (
+    !branchname ||
+    !branchimage ||
+    !displayimage ||
+    branchname === "" ||
+    displayimage === "" ||
+    branchimage === ""
+  ) {
+    res.json({
+      message: "ALL Fields Are Required",
+    });
+    return;
+  }
+  try {
+    const updatedbranch = await prisma.branch.update({
+      where: {
+        branchname,
+      },
+      data: {
+        
+        displayimage,
+      },
+    });
+    res.json({
+      updatedBranch: updatedbranch,
+    });
+  } catch (error) {
+    res.json({
+      err: error,
+    });
+    return;
+  }
+};

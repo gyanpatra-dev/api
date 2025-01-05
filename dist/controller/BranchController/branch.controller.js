@@ -17,31 +17,40 @@ const getallbranch = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         const branches = yield prisma.branch.findMany();
         if (!branches) {
             res.json({
-                message: "No Branch Found !"
+                message: "No Branch Found !",
             });
         }
         res.json({
             branches: branches,
-            message: "Branch Fetched Successfully"
+            message: "Branch Fetched Successfully",
         });
     }
     catch (error) {
         res.json({
-            error
+            error,
         });
     }
 });
 exports.getallbranch = getallbranch;
 const createbranch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { branchname, displayimage, branchimage } = req.body;
+    const { branchname, displayimage } = req.body;
     if (!branchname ||
         !displayimage ||
-        !branchimage ||
         branchname === "" ||
-        branchimage === "" ||
         displayimage === "") {
         res.json({
             message: " All fields are required",
+        });
+        return;
+    }
+    const isbranchexist = yield prisma.branch.findUnique({
+        where: {
+            branchname
+        }
+    });
+    if (isbranchexist) {
+        res.status(400).json({
+            message: "Branch Already Exists",
         });
         return;
     }
@@ -50,7 +59,6 @@ const createbranch = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             data: {
                 branchname,
                 displayimage,
-                branchimage,
             },
         });
         if (newbranch) {
@@ -60,7 +68,7 @@ const createbranch = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         }
     }
     catch (error) {
-        res.json({
+        res.status(200).json({
             error: error,
         });
         console.log(error);
@@ -70,29 +78,33 @@ const createbranch = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 exports.createbranch = createbranch;
 const updatebranch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { branchimage, displayimage, branchname } = req.body;
-    if (!branchname || !branchimage || !displayimage || branchname === "" || displayimage === "" || branchimage === "") {
+    if (!branchname ||
+        !branchimage ||
+        !displayimage ||
+        branchname === "" ||
+        displayimage === "" ||
+        branchimage === "") {
         res.json({
-            message: "ALL Fields Are Required"
+            message: "ALL Fields Are Required",
         });
         return;
     }
     try {
         const updatedbranch = yield prisma.branch.update({
             where: {
-                branchname
+                branchname,
             },
             data: {
-                branchimage,
-                displayimage
-            }
+                displayimage,
+            },
         });
         res.json({
-            updatedBranch: updatedbranch
+            updatedBranch: updatedbranch,
         });
     }
     catch (error) {
         res.json({
-            err: error
+            err: error,
         });
         return;
     }
