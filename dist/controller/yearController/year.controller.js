@@ -9,21 +9,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createyear = exports.getallyear = void 0;
+exports.getallyear = void 0;
 const client_1 = require("@prisma/client");
 // instances
 const prisma = new client_1.PrismaClient();
 const getallyear = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { branchId } = req.body;
-    if (!branchId || branchId === "") {
-        res.json({
+    const { branchId } = req.params;
+    const branchid = Number(branchId);
+    if (!branchid) {
+        res.status(400).json({
             message: "All Fields Are Required"
         });
+        return;
     }
     try {
         const requiredyear = yield prisma.year.findMany({
             where: {
-                branchId
+                branchId: branchid
             }
         });
         res.json({
@@ -36,26 +38,26 @@ const getallyear = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.getallyear = getallyear;
-const createyear = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { branchId } = req.body;
-    if (!branchId || branchId === "") {
-        res.json({
-            message: "All Fields Are Required"
-        });
-    }
-    try {
-        const newyear = yield prisma.year.create({
-            data: {
-                branchId,
-            }
-        });
-        res.json({
-            message: "Year Created Successfully",
-            newyear
-        });
-    }
-    catch (error) {
-        message: error;
-    }
-});
-exports.createyear = createyear;
+// export const createyear = async(req: Request,res: Response)=>{
+//     const{branchId} = req.params
+//     const branchid = Number(branchId)
+//     if(!branchid){
+//          res.status(400).json({
+//             message: "All Fields Are Required"
+//         })
+//         return;
+//     }
+//     try {
+//         const newyear = await prisma.year.create({
+//             data:{
+//                 branchId:branchid
+//             }
+//         })
+//         res.json({
+//             message: "Year Created Successfully",
+//             newyear
+//         })
+//     } catch (error) {
+//         message:error
+//     }
+// }

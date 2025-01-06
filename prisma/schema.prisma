@@ -37,6 +37,7 @@ model Branch {
   year         Year[]   @relation("BranchYear")
   displayimage String
   branchname   String   @unique
+  branchcode   String   @unique
 }
 
 model Year {
@@ -44,6 +45,7 @@ model Year {
   branchId  Int
   branch    Branch    @relation("BranchYear", fields: [branchId], references: [branch_id], onDelete: Cascade)
   subjects  Subject[]
+  yearName  String
 }
 
 model Subject {
@@ -54,6 +56,7 @@ model Subject {
   notes                 Notes[]
   subjectname           String
   branchname            String
+  iscommon              Boolean @default(false)
 }
 
 model Pyq {

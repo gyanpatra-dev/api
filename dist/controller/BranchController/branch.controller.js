@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updatebranch = exports.createbranch = exports.getallbranch = void 0;
+exports.updatebranch = exports.createmanybranch = exports.createbranch = exports.getallbranch = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const getallbranch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -33,49 +33,67 @@ const getallbranch = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 });
 exports.getallbranch = getallbranch;
 const createbranch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { branchname, displayimage } = req.body;
-    if (!branchname ||
+    const { branchname, displayimage, branchcode } = req.body;
+    if (!branchcode ||
+        !branchname ||
         !displayimage ||
         branchname === "" ||
-        displayimage === "") {
-        res.json({
-            message: " All fields are required",
+        displayimage === "" ||
+        branchcode === "") {
+        res.status(400).json({
+            message: "All fields are required",
         });
         return;
     }
     const isbranchexist = yield prisma.branch.findUnique({
-        where: {
-            branchname
-        }
+        where: { branchname },
     });
     if (isbranchexist) {
-        res.status(400).json({
-            message: "Branch Already Exists",
-        });
+        res.status(400).json({ message: "Branch Already Exists" });
         return;
     }
     try {
         const newbranch = yield prisma.branch.create({
-            data: {
-                branchname,
-                displayimage,
-            },
+            data: { branchname, displayimage, branchcode },
         });
-        if (newbranch) {
-            res.json({
-                newbranch: newbranch,
-            });
-        }
+        res.json({ newbranch });
     }
     catch (error) {
-        res.status(200).json({
-            error: error,
-        });
-        console.log(error);
-        return;
+        res.status(500).json({ error });
+        console.error(error);
     }
 });
 exports.createbranch = createbranch;
+const createmanybranch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const branches = req.body;
+    if (!Array.isArray(branches) || branches.length === 0) {
+        res.status(400).json({ message: "Input must be an array of branches" });
+        return;
+    }
+    for (const branch of branches) {
+        const { branchname, displayimage, branchcode } = branch;
+        if (!branchname || !displayimage || !branchcode || branchname === "" || displayimage === "" || branchcode === "") {
+            res.status(400).json({ message: "All fields are required for each branch" });
+            return;
+        }
+        const isbranchexist = yield prisma.branch.findUnique({
+            where: { branchname },
+        });
+        if (isbranchexist) {
+            res.status(400).json({ message: `Branch ${branch.branchname} already exists` });
+            return;
+        }
+    }
+    try {
+        const newbranches = yield prisma.branch.createMany({ data: branches });
+        res.json({ newbranches });
+    }
+    catch (error) {
+        res.status(500).json({ error });
+        console.error(error);
+    }
+});
+exports.createmanybranch = createmanybranch;
 const updatebranch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { branchimage, displayimage, branchname } = req.body;
     if (!branchname ||

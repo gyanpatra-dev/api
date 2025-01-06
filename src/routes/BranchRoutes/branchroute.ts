@@ -1,6 +1,6 @@
 import { Router } from "express";
 const branchrouter = Router()
-import { getallbranch, updatebranch } from "../../controller/BranchController/branch.controller";
+import { createmanybranch, getallbranch, updatebranch } from "../../controller/BranchController/branch.controller";
 import { createbranch } from "../../controller/BranchController/branch.controller";
 
 
@@ -8,6 +8,7 @@ import { createbranch } from "../../controller/BranchController/branch.controlle
 branchrouter.get("/", getallbranch)
 branchrouter.post("/create",createbranch);
 branchrouter.post("/update",updatebranch)
+branchrouter.post("/createmany",createmanybranch)
 
 
 export default branchrouter

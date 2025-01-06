@@ -7,4 +7,5 @@ const branch_controller_2 = require("../../controller/BranchController/branch.co
 branchrouter.get("/", branch_controller_1.getallbranch);
 branchrouter.post("/create", branch_controller_2.createbranch);
 branchrouter.post("/update", branch_controller_1.updatebranch);
+branchrouter.post("/createmany", branch_controller_1.createmanybranch);
 exports.default = branchrouter;

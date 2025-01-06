@@ -21,55 +21,84 @@ export const getallbranch = async (req: Request, res: Response) => {
     });
   }
 };
-
+interface Branch {
+  branchname: string;
+  displayimage: string;
+  branchcode: string;
+}
 export const createbranch = async (req: Request, res: Response) => {
-  const { branchname, displayimage } = req.body;
+  const { branchname, displayimage, branchcode }: Branch = req.body;
 
   if (
+    !branchcode ||
     !branchname ||
     !displayimage ||
     branchname === "" ||
-    displayimage === ""
+    displayimage === "" ||
+    branchcode === ""
   ) {
-    res.json({
-      message: " All fields are required",
+    res.status(400).json({
+      message: "All fields are required",
     });
     return;
   }
-  const isbranchexist = await prisma.branch.findUnique({
-    where:{
-      branchname
-    }
-  })
 
-  if(isbranchexist){
-    res.status(400).json({
-      message: "Branch Already Exists",
-    })
-    return ;
+  const isbranchexist = await prisma.branch.findUnique({
+    where: { branchname },
+  });
+
+  if (isbranchexist) {
+    res.status(400).json({ message: "Branch Already Exists" });
+    return;
   }
 
   try {
     const newbranch = await prisma.branch.create({
-      data: {
-        branchname,
-        displayimage,
-        
-      },
+      data: { branchname, displayimage, branchcode },
     });
-    if (newbranch) {
-      res.json({
-        newbranch: newbranch,
-      });
-    }
+    res.json({ newbranch });
   } catch (error) {
-    res.status(200).json({
-      error: error,
-    });
-    console.log(error);
-    return;
+    res.status(500).json({ error });
+    console.error(error);
   }
 };
+
+export const createmanybranch = async (req: Request, res: Response) => {
+  const branches: Branch[] = req.body;
+
+  if (!Array.isArray(branches) || branches.length === 0) {
+    res.status(400).json({ message: "Input must be an array of branches" });
+    return;
+  }
+
+  for (const branch of branches) {
+    const { branchname, displayimage, branchcode } = branch;
+
+    if (!branchname || !displayimage || !branchcode || branchname === "" || displayimage === "" || branchcode === "") {
+      res.status(400).json({ message: "All fields are required for each branch" });
+      return;
+    }
+
+    const isbranchexist = await prisma.branch.findUnique({
+      where: { branchname },
+    });
+
+    if (isbranchexist) {
+      res.status(400).json({ message: `Branch ${branch.branchname} already exists` });
+      return;
+    }
+  }
+
+  try {
+    const newbranches = await prisma.branch.createMany({ data: branches });
+    res.json({ newbranches });
+  } catch (error) {
+    res.status(500).json({ error });
+    console.error(error);
+  }
+};
+
+
 
 interface updateifo {
   branchimage: string;
@@ -98,7 +127,6 @@ export const updatebranch = async (req: Request, res: Response) => {
         branchname,
       },
       data: {
-        
         displayimage,
       },
     });
