@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
+import { string } from "zod";
 
 
 
@@ -31,30 +32,39 @@ export const getallyear = async(req: Request,res: Response)=>{
         err:error
     }
 }
+interface year{
+    branchId:number;
+    yearName:string
+}
+export const createYear = async (req: Request, res: Response) => {
+    const { branchId, yearName }: year = req.body;
 
+    const branchid = Number(branchId);
+    if (!branchid || !yearName || yearName.trim() === "") {
+        res.status(400).json({
+            message: "All Fields Are Required"
+        });
+        return;
+    }
 
-// export const createyear = async(req: Request,res: Response)=>{
-//     const{branchId} = req.params
-//     const branchid = Number(branchId)
-//     if(!branchid){
-//          res.status(400).json({
-//             message: "All Fields Are Required"
-//         })
-//         return;
-//     }
-//     try {
-//         const newyear = await prisma.year.create({
-//             data:{
-//                 branchId:branchid
-                
-//             }
-//         })
-//         res.json({
-//             message: "Year Created Successfully",
-//             newyear
-//         })
-//     } catch (error) {
-//         message:error
-//     }
+    try {
+       
 
-// }
+        const newYear = await prisma.year.create({
+            data: {
+                branchId: branchid,
+                yearName: yearName
+            }
+        });
+
+        res.status(201).json({
+            message: "Year Created Successfully",
+            newYear
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: "An error occurred while creating the year",
+            
+        });
+    }
+};
