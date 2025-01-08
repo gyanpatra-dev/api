@@ -14,7 +14,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@prisma/client": "^6.1.0",
+    "@prisma/client": "^6.2.1",
     "@types/bcrypt": "^5.0.2",
     "@types/cors": "^2.8.17",
     "@types/dotenv": "^6.1.1",
@@ -27,10 +27,10 @@
     "jsonwebtoken": "^9.0.2",
     "loadash": "^1.0.0",
     "lodash": "^4.17.21",
-    "prisma": "^6.1.0",
     "zod": "^3.24.1"
   },
   "devDependencies": {
-    "@types/lodash": "^4.17.13"
+    "@types/lodash": "^4.17.13",
+    "prisma": "^6.2.1"
   }
 }

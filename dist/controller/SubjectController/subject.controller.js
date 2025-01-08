@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createSubjectMany = exports.createSubject = exports.getsubjects = void 0;
+exports.getCommonsubjects = exports.createSubjectMany = exports.createSubject = exports.getSubjectsByYear = exports.getsubjects = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const getsubjects = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -39,11 +39,50 @@ const getsubjects = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.getsubjects = getsubjects;
+const getSubjectsByYear = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { branchid, yearid } = req.params;
+    const parsedYearId = Number(yearid);
+    const parsedBranchId = Number(branchid);
+    // Check for NaN and ensure both are valid numbers
+    if (isNaN(parsedYearId) || isNaN(parsedBranchId)) {
+        res.status(400).json({
+            message: "All fields are required and must be valid numbers.",
+        });
+        return;
+    }
+    try {
+        const subjects = yield prisma.subject.findMany({
+            where: {
+                yearId: parsedYearId,
+                branchid: parsedBranchId,
+            },
+        });
+        if (!subjects || subjects.length === 0) {
+            res.status(404).json({
+                message: "No subjects found",
+            });
+            return;
+        }
+        res.status(200).json({ subjects });
+    }
+    catch (error) {
+        console.error("Error fetching subjects:", error);
+        res.status(500).json({
+            message: "An error occurred while fetching subjects.",
+        });
+    }
+});
+exports.getSubjectsByYear = getSubjectsByYear;
 const createSubject = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { yearId, subjectname, branchname } = req.body;
-    if (!yearId || !subjectname || !branchname || yearId === "" || subjectname === "" || branchname === "") {
+    const { yearId, subjectname, branchname, branchid } = req.body;
+    if (!yearId ||
+        !subjectname ||
+        !branchname ||
+        yearId === "" ||
+        subjectname === "" ||
+        branchname === "") {
         res.json({
-            message: " Al Fields Are Required"
+            message: " Al Fields Are Required",
         });
         return;
     }
@@ -52,12 +91,13 @@ const createSubject = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             data: {
                 yearId,
                 subjectname,
-                branchname
-            }
+                branchname,
+                branchid,
+            },
         });
         res.json({
             message: "Subject Created Successfully",
-            newsubject
+            newsubject,
         });
     }
     catch (error) {
@@ -77,8 +117,13 @@ const createSubjectMany = (req, res) => __awaiter(void 0, void 0, void 0, functi
         return;
     }
     for (const subject of subjects) {
-        const { yearId, subjectname, branchname } = subject;
-        if (!yearId || !subjectname || !branchname || subjectname === "" || branchname === "") {
+        const { yearId, subjectname, branchname, branchid } = subject;
+        if (!yearId ||
+            !subjectname ||
+            !branchname ||
+            !branchid ||
+            subjectname === "" ||
+            branchname === "") {
             res.status(400).json({
                 message: "All fields are required for each subject",
             });
@@ -104,3 +149,25 @@ const createSubjectMany = (req, res) => __awaiter(void 0, void 0, void 0, functi
     }
 });
 exports.createSubjectMany = createSubjectMany;
+const getCommonsubjects = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const subjects = yield prisma.subject.findMany({
+            where: {
+                iscommon: true
+            }
+        });
+        if (!subjects) {
+            res.status(400).json({
+                message: "No Subjects Found"
+            });
+            return;
+        }
+        res.json({
+            subjects
+        });
+    }
+    catch (error) {
+        error;
+    }
+});
+exports.getCommonsubjects = getCommonsubjects;

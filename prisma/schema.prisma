@@ -57,6 +57,7 @@ model Subject {
   subjectname           String
   branchname            String
   iscommon              Boolean @default(false)
+  branchid              Int
 }
 
 model Pyq {
