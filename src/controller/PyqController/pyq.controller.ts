@@ -13,42 +13,48 @@ export const createpyq = async (req: Request, res: Response) => {
 
   try {
     const newpyq = await prisma.pyq.create({
-        data: {
-            subjectId,
-            links
-        }
-    })
+      data: {
+        subjectId,
+        links,
+      },
+    });
     res.json({
-        pyq:newpyq
-    })
+      pyq: newpyq,
+    });
   } catch (error) {
     res.json({
-        message: error
-    })
+      message: error,
+    });
   }
 };
 
-
-export const getpyq  = async (req: Request,res: Response)=>{
-    const{subjectId} = req.body
-    if(!subjectId || subjectId ===""){
-        res.json({
-            message: "All Fields Are Required"
-        })
+export const getpyq = async (req: Request, res: Response) => {
+  const { subject_id } = req.params;
+  const parsedSubjectid = parseInt(subject_id);
+  if (!parsedSubjectid) {
+    res.json({
+      message: "All Fields Are Required",
+    });
+    return;
+  }
+  try {
+    const requireddata = await prisma.pyq.findMany({
+      where: {
+        subjectId: parsedSubjectid,
+      },
+    });
+    if (!requireddata) {
+      res.status(404).json({
+        message: "Nothing Found",
+      });
+      return;
     }
-    try {
-        const requireddata = await prisma.pyq.findMany({
-            where: {
-                subjectId
-            }
-        })
-        res.json({
-            pyq: requireddata
-        })
-    } catch (error) {
-        res.json({
-            message: error
-        })
-        
-    }
-}
+    res.json({
+      pyq: requireddata,
+    });
+  } catch (error) {
+    res.json({
+      message: error,
+    });
+  }
+};

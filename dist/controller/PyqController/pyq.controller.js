@@ -24,40 +24,48 @@ const createpyq = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const newpyq = yield prisma.pyq.create({
             data: {
                 subjectId,
-                links
-            }
+                links,
+            },
         });
         res.json({
-            pyq: newpyq
+            pyq: newpyq,
         });
     }
     catch (error) {
         res.json({
-            message: error
+            message: error,
         });
     }
 });
 exports.createpyq = createpyq;
 const getpyq = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { subjectId } = req.body;
-    if (!subjectId || subjectId === "") {
+    const { subject_id } = req.params;
+    const parsedSubjectid = parseInt(subject_id);
+    if (!parsedSubjectid) {
         res.json({
-            message: "All Fields Are Required"
+            message: "All Fields Are Required",
         });
+        return;
     }
     try {
         const requireddata = yield prisma.pyq.findMany({
             where: {
-                subjectId
-            }
+                subjectId: parsedSubjectid,
+            },
         });
+        if (!requireddata) {
+            res.status(404).json({
+                message: "Nothing Found",
+            });
+            return;
+        }
         res.json({
-            pyq: requireddata
+            pyq: requireddata,
         });
     }
     catch (error) {
         res.json({
-            message: error
+            message: error,
         });
     }
 });

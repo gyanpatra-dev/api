@@ -86,6 +86,18 @@ const createSubject = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         });
         return;
     }
+    const issubjectexist = yield prisma.subject.findMany({
+        where: {
+            subjectname: subjectname,
+            yearId,
+        },
+    });
+    if (issubjectexist.length > 0) {
+        res.status(400).json({
+            message: "Subject Already Exists",
+        });
+        return;
+    }
     try {
         const newsubject = yield prisma.subject.create({
             data: {
@@ -153,17 +165,17 @@ const getCommonsubjects = (req, res) => __awaiter(void 0, void 0, void 0, functi
     try {
         const subjects = yield prisma.subject.findMany({
             where: {
-                iscommon: true
-            }
+                iscommon: true,
+            },
         });
         if (!subjects) {
             res.status(400).json({
-                message: "No Subjects Found"
+                message: "No Subjects Found",
             });
             return;
         }
         res.json({
-            subjects
+            subjects,
         });
     }
     catch (error) {
