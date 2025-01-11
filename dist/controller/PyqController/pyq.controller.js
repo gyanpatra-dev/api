@@ -53,7 +53,8 @@ const getpyq = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 subjectId: parsedSubjectid,
             },
         });
-        if (!requireddata) {
+        console.log(requireddata);
+        if (requireddata.length === 0) {
             res.status(404).json({
                 message: "Nothing Found",
             });

@@ -43,7 +43,8 @@ export const getpyq = async (req: Request, res: Response) => {
         subjectId: parsedSubjectid,
       },
     });
-    if (!requireddata) {
+
+    if (requireddata.length === 0) {
       res.status(404).json({
         message: "Nothing Found",
       });
