@@ -13,13 +13,15 @@ exports.getPyqById = exports.getpyq = exports.createmanypyq = exports.createpyq 
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const createpyq = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { subjectId, links, pyqname } = req.body;
+    const { subjectId, links, pyqname, pyqyear } = req.body;
     if (!subjectId ||
         !pyqname ||
         !links ||
+        !pyqyear ||
         links === "" ||
         subjectId === "" ||
-        pyqname === "") {
+        pyqname === "" ||
+        pyqyear === "") {
         res.json({
             message: "All Fields Are Required",
         });
@@ -31,6 +33,7 @@ const createpyq = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 subjectId,
                 links,
                 pyqname,
+                pyqyear,
             },
         });
         res.json({
@@ -54,8 +57,8 @@ const createmanypyq = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
     // Filter out invalid pyqs
     const validPyqs = pyqs.filter(pyq => {
-        const { subjectId, pyqname, links, pyqtype } = pyq;
-        return subjectId && pyqname && links && pyqname.trim() && links.trim() && pyqtype.trim();
+        const { subjectId, pyqname, links, pyqtype, pyqyear } = pyq;
+        return subjectId && pyqname && links && pyqname.trim() && links.trim() && pyqtype.trim() && pyqyear.trim();
     });
     if (validPyqs.length === 0) {
         res.status(406).json({

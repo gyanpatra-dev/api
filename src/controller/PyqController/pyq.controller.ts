@@ -3,14 +3,16 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export const createpyq = async (req: Request, res: Response) => {
-  const { subjectId, links, pyqname } = req.body;
+  const { subjectId, links, pyqname,pyqyear } = req.body;
   if (
     !subjectId ||
     !pyqname ||
     !links ||
+    !pyqyear||
     links === "" ||
     subjectId === "" ||
-    pyqname === ""
+    pyqname === ""||
+    pyqyear ===""
   ) {
     res.json({
       message: "All Fields Are Required",
@@ -24,6 +26,7 @@ export const createpyq = async (req: Request, res: Response) => {
         subjectId,
         links,
         pyqname,
+        pyqyear,
       },
     });
     res.json({
@@ -49,8 +52,8 @@ export const createmanypyq = async (req: Request, res: Response) => {
 
   // Filter out invalid pyqs
   const validPyqs = pyqs.filter(pyq => {
-    const { subjectId, pyqname, links,pyqtype } = pyq;
-    return subjectId && pyqname && links && pyqname.trim() && links.trim() && pyqtype.trim();
+    const { subjectId, pyqname, links,pyqtype,pyqyear } = pyq;
+    return subjectId && pyqname && links && pyqname.trim() && links.trim() && pyqtype.trim() && pyqyear.trim();
   });
 
   if (validPyqs.length === 0) {

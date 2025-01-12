@@ -67,6 +67,7 @@ model Pyq {
   links     String
   pyqtype   String  @default("MID")
   pyqname   String
+  pyqyear   String  
 
 }
 
