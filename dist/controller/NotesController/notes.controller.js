@@ -13,8 +13,8 @@ exports.getnotes = exports.createnotes = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const createnotes = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { subjectId, link } = req.body;
-    if (!subjectId || !link || subjectId === "" || link === "") {
+    const { subjectId, link, notesname } = req.body;
+    if (!subjectId || !link || !notesname || subjectId === "" || link === "" || notesname === "") {
         res.json({
             message: "All Fields Are Required",
         });
@@ -25,6 +25,7 @@ const createnotes = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             data: {
                 subjectId,
                 link,
+                notesname
             },
         });
         res.json({

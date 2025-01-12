@@ -3,8 +3,8 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export const createnotes = async (req: Request, res: Response) => {
-  const { subjectId, link } = req.body;
-  if (!subjectId || !link || subjectId === "" || link === "") {
+  const { subjectId, link,notesname } = req.body;
+  if (!subjectId || !link ||!notesname || subjectId === "" || link === ""||notesname ==="") {
     res.json({
       message: "All Fields Are Required",
     });
@@ -16,6 +16,7 @@ export const createnotes = async (req: Request, res: Response) => {
       data: {
         subjectId,
         link,
+        notesname
       },
     });
 

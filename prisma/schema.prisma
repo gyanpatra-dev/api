@@ -66,6 +66,7 @@ model Pyq {
   subject   Subject @relation(fields: [subjectId], references: [subject_id], onDelete: Cascade, onUpdate: Cascade)
   links     String
   pyqtype   String  @default("MID")
+  pyqname   String
 
 }
 
@@ -74,4 +75,5 @@ model Notes {
   subjectId Int
   subject   Subject @relation(fields: [subjectId], references: [subject_id], onDelete: Cascade, onUpdate: Cascade)
   link      String  
+  notesname String
 }
