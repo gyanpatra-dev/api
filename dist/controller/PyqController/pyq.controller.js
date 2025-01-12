@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getpyq = exports.createmanypyq = exports.createpyq = void 0;
+exports.getPyqById = exports.getpyq = exports.createmanypyq = exports.createpyq = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const createpyq = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -119,3 +119,25 @@ const getpyq = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getpyq = getpyq;
+const getPyqById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { pyqid } = req.params;
+        const parsedId = parseInt(pyqid);
+        if (isNaN(parsedId)) {
+            res.status(400).json({ error: 'Invalid PYQ ID format' });
+            return;
+        }
+        const data = yield prisma.pyq.findUnique({
+            where: { pyq_id: parsedId }, // Assuming 'id' is the column name
+        });
+        if (!data) {
+            res.status(404).json({ error: 'PYQ not found' });
+            return;
+        }
+        res.status(200).json(data);
+    }
+    catch (error) {
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+exports.getPyqById = getPyqById;

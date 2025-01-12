@@ -115,3 +115,29 @@ export const getpyq = async (req: Request, res: Response) => {
     });
   }
 };
+
+
+export const getPyqById = async (req: Request, res: Response) => {
+  try {
+    const { pyqid } = req.params;
+    const parsedId = parseInt(pyqid);
+
+    if (isNaN(parsedId)) {
+     res.status(400).json({ error: 'Invalid PYQ ID format' });
+     return ;
+    }
+
+    const data = await prisma.pyq.findUnique({
+      where: { pyq_id: parsedId }, // Assuming 'id' is the column name
+    });
+
+    if (!data) {
+   res.status(404).json({ error: 'PYQ not found' });
+   return ;
+    }
+
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
