@@ -7,5 +7,5 @@ pyqrouter.post("/create", pyq_controller_1.createpyq);
 pyqrouter.post("/createmany", pyq_controller_1.createmanypyq);
 pyqrouter.get("/:subject_id", pyq_controller_1.getpyq);
 pyqrouter.get("/id/:pyqid", pyq_controller_1.getPyqById);
-pyqrouter.get("/getall");
+pyqrouter.get("/getall", pyq_controller_1.getallpyq);
 exports.default = pyqrouter;
