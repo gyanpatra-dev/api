@@ -8,7 +8,7 @@ pyqrouter.post("/create",createpyq);
 pyqrouter.post("/createmany",createmanypyq);
 pyqrouter.get("/:subject_id",getpyq);
 pyqrouter.get("/id/:pyqid",getPyqById);
-pyqrouter.get("/getall",getallpyq)
+pyqrouter.get("/",getallpyq)
 
 
 
