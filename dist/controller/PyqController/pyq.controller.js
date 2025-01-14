@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getPyqById = exports.getpyq = exports.createmanypyq = exports.createpyq = void 0;
+exports.getallpyq = exports.getPyqById = exports.getpyq = exports.createmanypyq = exports.createpyq = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const createpyq = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -144,3 +144,20 @@ const getPyqById = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.getPyqById = getPyqById;
+const getallpyq = (res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const allpyqs = yield prisma.pyq.findMany();
+        if (!allpyqs) {
+            res.status(404).json({
+                message: "Nothing found"
+            });
+            return;
+        }
+        res.json(allpyqs);
+    }
+    catch (error) {
+        error;
+        return;
+    }
+});
+exports.getallpyq = getallpyq;

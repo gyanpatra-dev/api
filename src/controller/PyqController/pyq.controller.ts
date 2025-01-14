@@ -144,3 +144,21 @@ export const getPyqById = async (req: Request, res: Response) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+
+export const getallpyq = async(res:Response)=>{
+  try {
+    const allpyqs = await prisma.pyq.findMany();
+    if(!allpyqs){
+      res.status(404).json({
+        message: "Nothing found"
+      })
+      return;
+    }
+    res.json(allpyqs)
+    
+  } catch (error) {
+    error
+    return
+  }
+}
