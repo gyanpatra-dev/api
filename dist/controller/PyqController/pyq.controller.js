@@ -51,33 +51,39 @@ const createmanypyq = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     const { pyqs } = req.body;
     if (!Array.isArray(pyqs) || pyqs.length === 0) {
         res.status(406).json({
-            message: "At least one pyq is required"
+            message: "At least one pyq is required",
         });
         return;
     }
     // Filter out invalid pyqs
-    const validPyqs = pyqs.filter(pyq => {
+    const validPyqs = pyqs.filter((pyq) => {
         const { subjectId, pyqname, links, pyqtype, pyqyear } = pyq;
-        return subjectId && pyqname && links && pyqname.trim() && links.trim() && pyqtype.trim() && pyqyear.trim();
+        return (subjectId &&
+            pyqname &&
+            links &&
+            pyqname.trim() &&
+            links.trim() &&
+            pyqtype.trim() &&
+            pyqyear.trim());
     });
     if (validPyqs.length === 0) {
         res.status(406).json({
-            message: "All fields are required for each pyq"
+            message: "All fields are required for each pyq",
         });
         return;
     }
     try {
         const createdPyqs = yield prisma.pyq.createMany({
-            data: validPyqs
+            data: validPyqs,
         });
         res.status(201).json({
-            message: `${createdPyqs.count} pyqs created`
+            message: `${createdPyqs.count} pyqs created`,
         });
     }
     catch (error) {
         console.error("Error creating pyqs:", error);
         res.status(500).json({
-            message: "An error occurred while creating pyqs"
+            message: "An error occurred while creating pyqs",
         });
     }
 });
@@ -102,8 +108,8 @@ const getpyq = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 pyqtype: true,
                 pyq_id: true,
                 pyqname: true,
-                subject: true
-            }
+                subject: true,
+            },
         });
         if (requireddata.length === 0) {
             res.status(404).json({
@@ -127,37 +133,42 @@ const getPyqById = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const { pyqid } = req.params;
         const parsedId = parseInt(pyqid);
         if (isNaN(parsedId)) {
-            res.status(400).json({ error: 'Invalid PYQ ID format' });
+            res.status(400).json({ error: "Invalid PYQ ID format" });
             return;
         }
         const data = yield prisma.pyq.findUnique({
             where: { pyq_id: parsedId }, // Assuming 'id' is the column name
         });
         if (!data) {
-            res.status(404).json({ error: 'PYQ not found' });
+            res.status(404).json({ error: "PYQ not found" });
             return;
         }
         res.status(200).json(data);
     }
     catch (error) {
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: "Internal server error" });
     }
 });
 exports.getPyqById = getPyqById;
-const getallpyq = (res) => __awaiter(void 0, void 0, void 0, function* () {
+const getallpyq = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const allpyqs = yield prisma.pyq.findMany();
+        const allpyqs = yield prisma.pyq.findMany({
+            select: {
+                pyqname: true,
+                pyq_id: true,
+            },
+        });
         if (!allpyqs) {
-            res.status(404).json({
-                message: "Nothing found"
+            res.json({
+                message: "Nothing Found"
             });
-            return;
         }
-        res.json(allpyqs);
+        res.json({
+            allpyqs,
+        });
     }
     catch (error) {
-        error;
-        return;
+        console.error("Error fetching PYQs:", error);
     }
 });
 exports.getallpyq = getallpyq;

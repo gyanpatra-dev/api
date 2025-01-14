@@ -3,16 +3,16 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export const createpyq = async (req: Request, res: Response) => {
-  const { subjectId, links, pyqname,pyqyear } = req.body;
+  const { subjectId, links, pyqname, pyqyear } = req.body;
   if (
     !subjectId ||
     !pyqname ||
     !links ||
-    !pyqyear||
+    !pyqyear ||
     links === "" ||
     subjectId === "" ||
-    pyqname === ""||
-    pyqyear ===""
+    pyqname === "" ||
+    pyqyear === ""
   ) {
     res.json({
       message: "All Fields Are Required",
@@ -39,42 +39,49 @@ export const createpyq = async (req: Request, res: Response) => {
   }
 };
 
-
 export const createmanypyq = async (req: Request, res: Response) => {
   const { pyqs } = req.body;
 
   if (!Array.isArray(pyqs) || pyqs.length === 0) {
     res.status(406).json({
-      message: "At least one pyq is required"
+      message: "At least one pyq is required",
     });
     return;
   }
 
   // Filter out invalid pyqs
-  const validPyqs = pyqs.filter(pyq => {
-    const { subjectId, pyqname, links,pyqtype,pyqyear } = pyq;
-    return subjectId && pyqname && links && pyqname.trim() && links.trim() && pyqtype.trim() && pyqyear.trim();
+  const validPyqs = pyqs.filter((pyq) => {
+    const { subjectId, pyqname, links, pyqtype, pyqyear } = pyq;
+    return (
+      subjectId &&
+      pyqname &&
+      links &&
+      pyqname.trim() &&
+      links.trim() &&
+      pyqtype.trim() &&
+      pyqyear.trim()
+    );
   });
 
   if (validPyqs.length === 0) {
     res.status(406).json({
-      message: "All fields are required for each pyq"
+      message: "All fields are required for each pyq",
     });
     return;
   }
 
   try {
     const createdPyqs = await prisma.pyq.createMany({
-      data: validPyqs
+      data: validPyqs,
     });
 
     res.status(201).json({
-      message: `${createdPyqs.count} pyqs created`
+      message: `${createdPyqs.count} pyqs created`,
     });
   } catch (error) {
     console.error("Error creating pyqs:", error);
     res.status(500).json({
-      message: "An error occurred while creating pyqs"
+      message: "An error occurred while creating pyqs",
     });
   }
 };
@@ -93,14 +100,14 @@ export const getpyq = async (req: Request, res: Response) => {
       where: {
         subjectId: parsedSubjectid,
       },
-      select:{
-        links:true,
-        subjectId:true,
-        pyqtype:true,
-        pyq_id:true,
-        pyqname:true,
-        subject:true
-      }
+      select: {
+        links: true,
+        subjectId: true,
+        pyqtype: true,
+        pyq_id: true,
+        pyqname: true,
+        subject: true,
+      },
     });
 
     if (requireddata.length === 0) {
@@ -119,15 +126,14 @@ export const getpyq = async (req: Request, res: Response) => {
   }
 };
 
-
 export const getPyqById = async (req: Request, res: Response) => {
   try {
     const { pyqid } = req.params;
     const parsedId = parseInt(pyqid);
 
     if (isNaN(parsedId)) {
-     res.status(400).json({ error: 'Invalid PYQ ID format' });
-     return ;
+      res.status(400).json({ error: "Invalid PYQ ID format" });
+      return;
     }
 
     const data = await prisma.pyq.findUnique({
@@ -135,30 +141,33 @@ export const getPyqById = async (req: Request, res: Response) => {
     });
 
     if (!data) {
-   res.status(404).json({ error: 'PYQ not found' });
-   return ;
+      res.status(404).json({ error: "PYQ not found" });
+      return;
     }
 
     res.status(200).json(data);
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
-
-export const getallpyq = async(res:Response)=>{
+export const getallpyq = async (req: Request, res: Response) => {
   try {
-    const allpyqs = await prisma.pyq.findMany();
+    const allpyqs = await prisma.pyq.findMany({
+      select: {
+        pyqname: true,
+        pyq_id: true,
+      },
+    });
     if(!allpyqs){
-      res.status(404).json({
-        message: "Nothing found"
+      res.json({
+        message:"Nothing Found"
       })
-      return;
     }
-    res.json(allpyqs)
-    
+    res.json({
+      allpyqs,
+    });
   } catch (error) {
-    error
-    return
+    console.error("Error fetching PYQs:", error);
   }
-}
+};
