@@ -3,12 +3,14 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export const createpyq = async (req: Request, res: Response) => {
-  const { subjectId, links, pyqname, pyqyear } = req.body;
+  const { subjectId, links, pyqname, pyqyear,pyqtype } = req.body;
   if (
     !subjectId ||
     !pyqname ||
     !links ||
     !pyqyear ||
+    !pyqtype ||
+    pyqtype === "" ||
     links === "" ||
     subjectId === "" ||
     pyqname === "" ||
@@ -27,6 +29,7 @@ export const createpyq = async (req: Request, res: Response) => {
         links,
         pyqname,
         pyqyear,
+        pyqtype,
       },
     });
     res.json({
