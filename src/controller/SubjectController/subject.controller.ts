@@ -188,3 +188,27 @@ export const getCommonsubjects = async (req: Request, res: Response) => {
     error;
   }
 };
+
+
+export const getallsubjects = async(req:Request, res:Response)=>{
+  try {
+    const subjects = await prisma.subject.findMany({
+      select:{
+        subject_id:true,
+        subjectname:true
+      }
+    })
+    if(subjects.length===0){
+      res.status(400).json({
+        message: "No Subjects Found",
+      });
+      return;
+    }
+    res.json({
+      subjects,
+    });
+  } catch (error) {
+    error
+    
+  }
+}

@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCommonsubjects = exports.createSubjectMany = exports.createSubject = exports.getSubjectsByYear = exports.getsubjects = void 0;
+exports.getallsubjects = exports.getCommonsubjects = exports.createSubjectMany = exports.createSubject = exports.getSubjectsByYear = exports.getsubjects = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const getsubjects = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -183,3 +183,26 @@ const getCommonsubjects = (req, res) => __awaiter(void 0, void 0, void 0, functi
     }
 });
 exports.getCommonsubjects = getCommonsubjects;
+const getallsubjects = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const subjects = yield prisma.subject.findMany({
+            select: {
+                subject_id: true,
+                subjectname: true
+            }
+        });
+        if (subjects.length === 0) {
+            res.status(400).json({
+                message: "No Subjects Found",
+            });
+            return;
+        }
+        res.json({
+            subjects,
+        });
+    }
+    catch (error) {
+        error;
+    }
+});
+exports.getallsubjects = getallsubjects;

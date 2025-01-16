@@ -13,11 +13,13 @@ exports.getallpyq = exports.getPyqById = exports.getpyq = exports.createmanypyq 
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const createpyq = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { subjectId, links, pyqname, pyqyear } = req.body;
+    const { subjectId, links, pyqname, pyqyear, pyqtype } = req.body;
     if (!subjectId ||
         !pyqname ||
         !links ||
         !pyqyear ||
+        !pyqtype ||
+        pyqtype === "" ||
         links === "" ||
         subjectId === "" ||
         pyqname === "" ||
@@ -34,6 +36,7 @@ const createpyq = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 links,
                 pyqname,
                 pyqyear,
+                pyqtype,
             },
         });
         res.json({

@@ -8,4 +8,5 @@ subjectrouter.post("/create", subject_controller_1.createSubject);
 subjectrouter.post("/createmany", subject_controller_1.createSubjectMany);
 subjectrouter.get("/data", subject_controller_1.getsubjects);
 subjectrouter.get("/common", subject_controller_1.getCommonsubjects);
+subjectrouter.get("/getall", subject_controller_1.getallsubjects);
 exports.default = subjectrouter;
