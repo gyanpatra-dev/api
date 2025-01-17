@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getnotes = exports.createnotes = void 0;
+exports.getnotesbyId = exports.getnotes = exports.createnotes = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const createnotes = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -52,6 +52,12 @@ const getnotes = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 link: true,
             },
         });
+        if (!notes || notes.length === 0) {
+            res.json({
+                message: "No Notes Found",
+            });
+            return;
+        }
         res.json({
             notes: notes
         });
@@ -63,3 +69,35 @@ const getnotes = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getnotes = getnotes;
+const getnotesbyId = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { subjectId } = req.params;
+    const parsedSubjectid = parseInt(subjectId);
+    if (!subjectId || subjectId === "") {
+        res.json({
+            message: "All Fields Are Required",
+        });
+        return;
+    }
+    try {
+        const notes = yield prisma.notes.findMany({
+            where: {
+                subjectId: parsedSubjectid
+            }
+        });
+        if (!notes || notes.length === 0) {
+            res.status(404).json({
+                message: "No Notes Found (get notes by id)",
+            });
+            return;
+        }
+        res.json({
+            notes
+        });
+    }
+    catch (error) {
+        res.json({
+            message: error
+        });
+    }
+});
+exports.getnotesbyId = getnotesbyId;

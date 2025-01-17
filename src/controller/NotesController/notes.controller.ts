@@ -44,6 +44,13 @@ export const getnotes = async (req: Request, res: Response) => {
           link: true,
         },
       });
+
+      if (!notes || notes.length === 0) {
+        res.json({
+          message: "No Notes Found",
+        });
+        return;
+      }
       res.json({
         notes: notes
       })
@@ -54,3 +61,38 @@ export const getnotes = async (req: Request, res: Response) => {
     
   }
 };
+
+export const getnotesbyId = async (req: Request, res: Response) => {
+  const {subjectId}  = req.params;
+  const parsedSubjectid = parseInt(subjectId)
+  if(!subjectId || subjectId === ""){
+    res.json({
+      message: "All Fields Are Required",
+    });
+    return;
+  }
+  try {
+    const notes = await prisma.notes.findMany({
+      where:{
+        subjectId:parsedSubjectid
+      }
+    })
+    if(!notes || notes.length === 0){
+      res.status(404).json({
+        message: "No Notes Found (get notes by id)",
+      });
+      return;
+    }
+    res.json({
+      notes
+    })
+    
+  } catch (error) {
+    res.json({
+      message: error
+    })
+    
+  }
+
+
+}
