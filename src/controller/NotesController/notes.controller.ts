@@ -62,7 +62,7 @@ export const getnotes = async (req: Request, res: Response) => {
   }
 };
 
-export const getnotesbyId = async (req: Request, res: Response) => {
+export const getnotesbysubjectid = async (req: Request, res: Response) => {
   const {subjectId}  = req.params;
   const parsedSubjectid = parseInt(subjectId)
   if(!subjectId || subjectId === ""){
@@ -95,4 +95,8 @@ export const getnotesbyId = async (req: Request, res: Response) => {
   }
 
 
+}
+
+export const getnotesbyid = async(req:Request,res:Response)=>{
+  const {notes_id} = req.params
 }
