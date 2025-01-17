@@ -82,6 +82,12 @@ const getnotesbysubjectid = (req, res) => __awaiter(void 0, void 0, void 0, func
         const notes = yield prisma.notes.findMany({
             where: {
                 subjectId: parsedSubjectid
+            },
+            select: {
+                notes_id: true,
+                subjectId: true,
+                link: true,
+                notesname: true
             }
         });
         if (!notes || notes.length === 0) {

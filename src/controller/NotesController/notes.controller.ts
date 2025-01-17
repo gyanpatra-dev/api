@@ -75,6 +75,12 @@ export const getnotesbysubjectid = async (req: Request, res: Response) => {
     const notes = await prisma.notes.findMany({
       where:{
         subjectId:parsedSubjectid
+      },
+      select:{
+        notes_id:true,
+        subjectId:true,
+        link:true, 
+        notesname:true
       }
     })
     if(!notes || notes.length === 0){
