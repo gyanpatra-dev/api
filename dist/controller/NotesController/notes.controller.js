@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getnotesbyId = exports.getnotes = exports.createnotes = void 0;
+exports.getnotesbyid = exports.getnotesbysubjectid = exports.getnotes = exports.createnotes = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const createnotes = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -69,7 +69,7 @@ const getnotes = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getnotes = getnotes;
-const getnotesbyId = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getnotesbysubjectid = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { subjectId } = req.params;
     const parsedSubjectid = parseInt(subjectId);
     if (!subjectId || subjectId === "") {
@@ -100,4 +100,33 @@ const getnotesbyId = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         });
     }
 });
-exports.getnotesbyId = getnotesbyId;
+exports.getnotesbysubjectid = getnotesbysubjectid;
+const getnotesbyid = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { notes_id } = req.params;
+    const parsedNotesid = parseInt(notes_id);
+    if (!notes_id || notes_id === "") {
+        res.json({
+            message: "All Fields Are Required",
+        });
+        return;
+    }
+    try {
+        const note = yield prisma.notes.findFirst({
+            where: {
+                notes_id: parsedNotesid
+            }
+        });
+        if (!note) {
+            res.status(404).json({
+                message: "No Notes Found (get notes by id)",
+            });
+            return;
+        }
+        res.json({
+            note
+        });
+    }
+    catch (error) {
+    }
+});
+exports.getnotesbyid = getnotesbyid;

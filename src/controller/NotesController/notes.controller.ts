@@ -99,4 +99,30 @@ export const getnotesbysubjectid = async (req: Request, res: Response) => {
 
 export const getnotesbyid = async(req:Request,res:Response)=>{
   const {notes_id} = req.params
+  const parsedNotesid = parseInt(notes_id)
+  if(!notes_id || notes_id === ""){
+    res.json({
+      message: "All Fields Are Required",
+    });
+    return;
+  }
+  try {
+    const note = await prisma.notes.findFirst({
+      where:{
+        notes_id:parsedNotesid
+      }
+    })
+    if(!note){
+      res.status(404).json({
+        message: "No Notes Found (get notes by id)",
+      });
+      return;
+    }
+    res.json({
+      note
+    })
+    
+  } catch (error) {
+    
+  }
 }
