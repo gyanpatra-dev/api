@@ -14,7 +14,12 @@ const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const createnotes = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { subjectId, link, notesname } = req.body;
-    if (!subjectId || !link || !notesname || subjectId === "" || link === "" || notesname === "") {
+    if (!subjectId ||
+        !link ||
+        !notesname ||
+        subjectId === "" ||
+        link === "" ||
+        notesname === "") {
         res.json({
             message: "All Fields Are Required",
         });
@@ -25,7 +30,7 @@ const createnotes = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             data: {
                 subjectId,
                 link,
-                notesname
+                notesname,
             },
         });
         res.json({
@@ -40,16 +45,13 @@ const createnotes = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 });
 exports.createnotes = createnotes;
 const getnotes = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { subjectId } = req.body;
     try {
         const notes = yield prisma.notes.findMany({
-            where: {
-                subjectId,
-            },
             select: {
                 notes_id: true,
                 subjectId: true,
                 link: true,
+                notesname: true
             },
         });
         if (!notes || notes.length === 0) {
@@ -59,12 +61,12 @@ const getnotes = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             return;
         }
         res.json({
-            notes: notes
+            notes: notes,
         });
     }
     catch (error) {
         res.json({
-            message: error
+            message: error,
         });
     }
 });
@@ -81,14 +83,14 @@ const getnotesbysubjectid = (req, res) => __awaiter(void 0, void 0, void 0, func
     try {
         const notes = yield prisma.notes.findMany({
             where: {
-                subjectId: parsedSubjectid
+                subjectId: parsedSubjectid,
             },
             select: {
                 notes_id: true,
                 subjectId: true,
                 link: true,
-                notesname: true
-            }
+                notesname: true,
+            },
         });
         if (!notes || notes.length === 0) {
             res.status(404).json({
@@ -97,12 +99,12 @@ const getnotesbysubjectid = (req, res) => __awaiter(void 0, void 0, void 0, func
             return;
         }
         res.json({
-            notes
+            notes,
         });
     }
     catch (error) {
         res.json({
-            message: error
+            message: error,
         });
     }
 });
@@ -119,8 +121,8 @@ const getnotesbyid = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     try {
         const note = yield prisma.notes.findFirst({
             where: {
-                notes_id: parsedNotesid
-            }
+                notes_id: parsedNotesid,
+            },
         });
         if (!note) {
             res.status(404).json({
@@ -129,10 +131,9 @@ const getnotesbyid = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             return;
         }
         res.json({
-            note
+            note,
         });
     }
-    catch (error) {
-    }
+    catch (error) { }
 });
 exports.getnotesbyid = getnotesbyid;
