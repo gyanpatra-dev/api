@@ -28,13 +28,14 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/user", userrouter);
-app.use("api/admin", adminrouter);
+app.use("/api/admin", adminrouter);
 app.use("/api/user/auth", authrouter);
 app.use("/api/branch", branchrouter);
 app.use("/api/year", yearrouter);
 app.use("/api/subject", subjectrouter);
 app.use("/api/pyq", pyqrouter);
 app.use("/api/notes", notesrouter);
+
 
 app.listen(process.env.PORT || 6000, () => {
   console.log(`server is running at http://localhost:${process.env.PORT}`);

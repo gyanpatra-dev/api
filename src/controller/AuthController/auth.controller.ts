@@ -19,7 +19,7 @@ const prisma = new PrismaClient()
 export const signup = async (req: Request, res: Response):Promise<any> => {
   const requiredbody = z.object({
     email: z.string().email(),
-    password: z.string().min(4).max(10),
+    password: z.string().min(4).max(20),
     name: z.string(),
     branch: z.enum([
       "CSE",
@@ -33,7 +33,8 @@ export const signup = async (req: Request, res: Response):Promise<any> => {
       "MME",
       "ME",
     ]),
-    semester: z.string(),
+    // semester: z.string(),
+    role: z.enum(["USER", "ADMIN"]),
   });
 
   const parseddata = requiredbody.safeParse(req.body);
@@ -72,7 +73,7 @@ export const signup = async (req: Request, res: Response):Promise<any> => {
         password: hashedpassword,
         name,
         // branch,
-        semester,
+        // semester,
       },
       
     });

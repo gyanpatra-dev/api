@@ -27,7 +27,7 @@ const prisma = new client_1.PrismaClient();
 const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const requiredbody = zod_1.z.object({
         email: zod_1.z.string().email(),
-        password: zod_1.z.string().min(4).max(10),
+        password: zod_1.z.string().min(4).max(20),
         name: zod_1.z.string(),
         branch: zod_1.z.enum([
             "CSE",
@@ -41,7 +41,8 @@ const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             "MME",
             "ME",
         ]),
-        semester: zod_1.z.string(),
+        // semester: z.string(),
+        role: zod_1.z.enum(["USER", "ADMIN"]),
     });
     const parseddata = requiredbody.safeParse(req.body);
     console.log(req.body);
@@ -74,7 +75,7 @@ const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 password: hashedpassword,
                 name,
                 // branch,
-                semester,
+                // semester,
             },
         });
         console.log(newuser);

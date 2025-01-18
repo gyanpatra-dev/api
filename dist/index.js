@@ -26,7 +26,7 @@ app.get("/", (req, res) => {
     });
 });
 app.use("/api/user", userrouter_1.default);
-app.use("api/admin", admin_router_1.default);
+app.use("/api/admin", admin_router_1.default);
 app.use("/api/user/auth", authrouter_1.default);
 app.use("/api/branch", branchroute_1.default);
 app.use("/api/year", yearrouter_1.default);
