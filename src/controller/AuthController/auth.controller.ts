@@ -116,25 +116,25 @@ export const signin = async(req: Request, res: Response) => {
     })
   
     if(!user){
-      res.json({
+      res.status(404).json({
         message: "User Not Found Try Signing Up"
       })
       return
     }
     const comparedpassword = await bcrypt.compare(password,user.password)
     if(!comparedpassword){
-      res.json({
+      res.status(401).json({
         message: "Something Went Wrong"
       })
       return
     }
     const token = jwt.sign({userid:user.user_id},JWT_USER_SECRET,{expiresIn:"1hr"})
-    res.json({
+    res.status(200).json({
       message: "user signedin successfully",
       token
     })  
   } catch (error) {
-    res.json({
+    res.status(500).json({
       message: "Error While Signing Up",
       err: error
     })

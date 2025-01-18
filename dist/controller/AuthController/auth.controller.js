@@ -113,26 +113,26 @@ const signin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             }
         });
         if (!user) {
-            res.json({
+            res.status(404).json({
                 message: "User Not Found Try Signing Up"
             });
             return;
         }
         const comparedpassword = yield bcrypt_1.default.compare(password, user.password);
         if (!comparedpassword) {
-            res.json({
+            res.status(401).json({
                 message: "Something Went Wrong"
             });
             return;
         }
         const token = jsonwebtoken_1.default.sign({ userid: user.user_id }, JWT_USER_SECRET, { expiresIn: "1hr" });
-        res.json({
+        res.status(200).json({
             message: "user signedin successfully",
             token
         });
     }
     catch (error) {
-        res.json({
+        res.status(500).json({
             message: "Error While Signing Up",
             err: error
         });
