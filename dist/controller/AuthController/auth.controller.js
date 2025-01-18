@@ -100,41 +100,39 @@ const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.signup = signup;
 const signin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = req.body;
-    if (!email || !password || email === "" || password === "") {
-        res.json({
-            message: "All The Fields Are Required"
+    if (!email || !password) {
+        res.status(400).json({
+            message: "All fields are required."
         });
         return;
     }
     try {
         const user = yield prisma.user.findUnique({
-            where: {
-                email
-            }
+            where: { email }
         });
         if (!user) {
             res.status(404).json({
-                message: "User Not Found Try Signing Up"
+                message: "User not found. Try signing up."
             });
             return;
         }
-        const comparedpassword = yield bcrypt_1.default.compare(password, user.password);
-        if (!comparedpassword) {
+        const isPasswordCorrect = yield bcrypt_1.default.compare(password, user.password);
+        if (!isPasswordCorrect) {
             res.status(401).json({
-                message: "Something Went Wrong"
+                message: "Incorrect password."
             });
             return;
         }
-        const token = jsonwebtoken_1.default.sign({ userid: user.user_id }, JWT_USER_SECRET, { expiresIn: "1hr" });
+        const token = jsonwebtoken_1.default.sign({ userId: user.user_id }, JWT_USER_SECRET, { expiresIn: "1h" });
         res.status(200).json({
-            message: "user signedin successfully",
+            message: "User signed in successfully.",
             token
         });
     }
     catch (error) {
         res.status(500).json({
-            message: "Error While Signing Up",
-            err: error
+            message: "An error occurred while signing in.",
+            error
         });
     }
 });
