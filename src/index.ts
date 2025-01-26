@@ -13,6 +13,7 @@ import yearrouter from "./routes/yearRoutes/yearrouter";
 import subjectrouter from "./routes/subjectRoutes/subjectRouter";
 import pyqrouter from "./routes/pyqRoutes/pyqroutes";
 import notesrouter from "./routes/NotesRoutes/notesrouter";
+import videorouter from "./routes/VideoRoutes/videoroute";
 
 //middlewares
 
@@ -35,7 +36,7 @@ app.use("/api/year", yearrouter);
 app.use("/api/subject", subjectrouter);
 app.use("/api/pyq", pyqrouter);
 app.use("/api/notes", notesrouter);
-
+app.use("/api/videos",videorouter)
 
 app.listen(process.env.PORT || 6000, () => {
   console.log(`server is running at http://localhost:${process.env.PORT}`);

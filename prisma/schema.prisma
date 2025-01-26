@@ -54,6 +54,7 @@ model Subject {
   year                  Year    @relation(fields: [yearId], references: [year_id], onDelete: Cascade, onUpdate: Cascade)
   pyqs                  Pyq[]
   notes                 Notes[]
+  videos                YoutubeLinks[]
   subjectname           String
   branchname            String
   iscommon              Boolean @default(false)
@@ -77,4 +78,12 @@ model Notes {
   subject   Subject @relation(fields: [subjectId], references: [subject_id], onDelete: Cascade, onUpdate: Cascade)
   link      String  
   notesname String
+}
+
+model YoutubeLinks{
+  video_id Int @id @default(autoincrement())
+  subjectId Int
+  subject  Subject @relation(fields: [subjectId], references: [subject_id], onDelete: Cascade, onUpdate: Cascade)
+  link     String
+  videoname String
 }
