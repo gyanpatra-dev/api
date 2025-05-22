@@ -25,6 +25,7 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.json({
     message: "Welcome To IITKIRBA Api",
+    author:"@gyanpatra.dev"
   });
 });
 
