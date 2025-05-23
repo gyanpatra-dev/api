@@ -174,3 +174,5 @@ export const getallpyq = async (req: Request, res: Response) => {
     console.error("Error fetching PYQs:", error);
   }
 };
+
+
