@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getallsubjects = exports.getCommonsubjects = exports.createSubjectMany = exports.createSubject = exports.getSubjectsByYear = exports.getsubjects = void 0;
+exports.getSubjectsByYearId = exports.getallsubjects = exports.getCommonsubjects = exports.createSubjectMany = exports.createSubject = exports.getSubjectsByYear = exports.getsubjects = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const getsubjects = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -206,3 +206,38 @@ const getallsubjects = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.getallsubjects = getallsubjects;
+const getSubjectsByYearId = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { yearid } = req.params;
+    if (!(yearid === null || yearid === void 0 ? void 0 : yearid.trim())) {
+        res.status(404).json({
+            message: "All fields are required"
+        });
+        return;
+    }
+    const parsedYearId = parseInt(yearid);
+    try {
+        const subjects = yield prisma.subject.findMany({
+            where: {
+                yearId: parsedYearId
+            }
+        });
+        if (!subjects || subjects.length === 0) {
+            res.status(400).json({
+                message: "No subjects found"
+            });
+            return;
+        }
+        res.status(200).json({
+            message: "Subjects found successfully",
+            subjects
+        });
+    }
+    catch (error) {
+        const err = error;
+        res.status(500).json({
+            message: "Internal server errror",
+            errror: err.message
+        });
+    }
+});
+exports.getSubjectsByYearId = getSubjectsByYearId;

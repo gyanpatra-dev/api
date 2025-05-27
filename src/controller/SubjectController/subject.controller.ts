@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
+import { record } from "zod";
+import axios from "axios";
 
 const prisma = new PrismaClient();
 
@@ -210,5 +212,42 @@ export const getallsubjects = async(req:Request, res:Response)=>{
   } catch (error) {
     error
     
+  }
+}
+
+
+export const getSubjectsByYearId = async(req: Request,res: Response)=>{
+  const {yearid} = req.params
+  if(!yearid?.trim()){
+    res.status(404).json({
+      message: "All fields are required"
+    })
+    return
+  }
+  
+  const parsedYearId = parseInt(yearid)
+  try {
+    const subjects = await prisma.subject.findMany({
+      where:{
+        yearId:parsedYearId
+      }
+    })
+    if(!subjects || subjects.length === 0){
+      res.status(400).json({
+        message: "No subjects found"
+
+      })
+      return
+    }
+    res.status(200).json({
+      message: "Subjects found successfully",
+      subjects
+    })
+  } catch (error) {
+    const err = error as Error
+    res.status(500).json({
+      message: "Internal server errror",
+      errror:err.message
+    })
   }
 }

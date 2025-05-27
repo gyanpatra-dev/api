@@ -4,6 +4,7 @@ const express_1 = require("express");
 const subject_controller_1 = require("../../controller/SubjectController/subject.controller");
 const subjectrouter = (0, express_1.Router)();
 subjectrouter.get("/:branchid/:yearid", subject_controller_1.getSubjectsByYear);
+subjectrouter.get("/:yearid", subject_controller_1.getSubjectsByYearId);
 subjectrouter.post("/create", subject_controller_1.createSubject);
 subjectrouter.post("/createmany", subject_controller_1.createSubjectMany);
 subjectrouter.get("/data", subject_controller_1.getsubjects);
