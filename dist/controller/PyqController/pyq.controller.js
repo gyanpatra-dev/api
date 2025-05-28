@@ -14,18 +14,13 @@ const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const createpyq = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { subjectId, links, pyqname, pyqyear, pyqtype } = req.body;
-    if (!subjectId ||
-        !pyqname ||
-        !links ||
-        !pyqyear ||
-        !pyqtype ||
-        pyqtype === "" ||
-        links === "" ||
-        subjectId === "" ||
-        pyqname === "" ||
-        pyqyear === "") {
-        res.json({
-            message: "All Fields Are Required",
+    if (!(subjectId === null || subjectId === void 0 ? void 0 : subjectId.trim()) ||
+        !(links === null || links === void 0 ? void 0 : links.trim()) ||
+        !(pyqname === null || pyqname === void 0 ? void 0 : pyqname.trim()) ||
+        !(pyqyear === null || pyqyear === void 0 ? void 0 : pyqyear.trim()) ||
+        !(pyqtype === null || pyqtype === void 0 ? void 0 : pyqtype.trim())) {
+        res.status(404).json({
+            message: "All fields are required xx",
         });
         return;
     }
@@ -96,7 +91,7 @@ const getpyq = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const parsedSubjectid = parseInt(subject_id);
     if (!parsedSubjectid) {
         res.json({
-            message: "All Fields Are Required",
+            message: "All Fields Are Required xx",
         });
         return;
     }
@@ -163,7 +158,7 @@ const getallpyq = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         });
         if (!allpyqs) {
             res.json({
-                message: "Nothing Found"
+                message: "Nothing Found",
             });
         }
         res.json({

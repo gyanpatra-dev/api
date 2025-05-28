@@ -3,25 +3,19 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export const createpyq = async (req: Request, res: Response) => {
-  const { subjectId, links, pyqname, pyqyear,pyqtype } = req.body;
+  const { subjectId, links, pyqname, pyqyear, pyqtype } = req.body;
   if (
-    !subjectId ||
-    !pyqname ||
-    !links ||
-    !pyqyear ||
-    !pyqtype ||
-    pyqtype === "" ||
-    links === "" ||
-    subjectId === "" ||
-    pyqname === "" ||
-    pyqyear === ""
+    !subjectId?.trim() ||
+    !links?.trim() ||
+    !pyqname?.trim() ||
+    !pyqyear?.trim() ||
+    !pyqtype?.trim()
   ) {
-    res.json({
-      message: "All Fields Are Required",
+    res.status(404).json({
+      message: "All fields are required ",
     });
     return;
   }
-
   try {
     const newpyq = await prisma.pyq.create({
       data: {
@@ -94,7 +88,7 @@ export const getpyq = async (req: Request, res: Response) => {
   const parsedSubjectid = parseInt(subject_id);
   if (!parsedSubjectid) {
     res.json({
-      message: "All Fields Are Required",
+      message: "All Fields Are Required xx",
     });
     return;
   }
@@ -162,10 +156,10 @@ export const getallpyq = async (req: Request, res: Response) => {
         pyq_id: true,
       },
     });
-    if(!allpyqs){
+    if (!allpyqs) {
       res.json({
-        message:"Nothing Found"
-      })
+        message: "Nothing Found",
+      });
     }
     res.json({
       allpyqs,
@@ -174,5 +168,3 @@ export const getallpyq = async (req: Request, res: Response) => {
     console.error("Error fetching PYQs:", error);
   }
 };
-
-

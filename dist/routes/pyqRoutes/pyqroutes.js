@@ -5,7 +5,7 @@ const pyq_controller_1 = require("../../controller/PyqController/pyq.controller"
 const pyqrouter = (0, express_1.Router)();
 pyqrouter.post("/create", pyq_controller_1.createpyq);
 pyqrouter.post("/createmany", pyq_controller_1.createmanypyq);
+pyqrouter.get("/", pyq_controller_1.getallpyq);
 pyqrouter.get("/:subject_id", pyq_controller_1.getpyq);
 pyqrouter.get("/id/:pyqid", pyq_controller_1.getPyqById);
-pyqrouter.get("/", pyq_controller_1.getallpyq);
 exports.default = pyqrouter;
