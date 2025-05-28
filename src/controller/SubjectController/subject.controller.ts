@@ -187,7 +187,10 @@ export const getCommonsubjects = async (req: Request, res: Response) => {
       subjects,
     });
   } catch (error) {
-    error;
+    const err = error as Error
+    res.status(500).json({
+      message:err.message
+    })
   }
 };
 

@@ -179,7 +179,10 @@ const getCommonsubjects = (req, res) => __awaiter(void 0, void 0, void 0, functi
         });
     }
     catch (error) {
-        error;
+        const err = error;
+        res.status(500).json({
+            message: err.message
+        });
     }
 });
 exports.getCommonsubjects = getCommonsubjects;
