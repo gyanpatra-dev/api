@@ -13,11 +13,10 @@ exports.getSubjectsByYearId = exports.getallsubjects = exports.getCommonsubjects
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const getsubjects = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { yearId, branchname } = req.body;
-    if (!yearId || !branchname || yearId === "" || branchname === "") {
-        res.status(400).json({
-            message: "All Fields Are Required",
-        });
+    const { yearId: rawYearId, branchname } = req.body;
+    const yearId = Number(rawYearId);
+    if (isNaN(yearId) || !(branchname === null || branchname === void 0 ? void 0 : branchname.trim())) {
+        res.status(400).json({ message: "All fields are required" });
         return;
     }
     try {
@@ -113,9 +112,11 @@ const createSubject = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         });
     }
     catch (error) {
-        message: "Filed";
-        error;
-        return;
+        const err = error;
+        res.status(500).json({
+            message: "Failed to create subject",
+            error: err.message,
+        });
     }
 });
 exports.createSubject = createSubject;
@@ -168,7 +169,7 @@ const getCommonsubjects = (req, res) => __awaiter(void 0, void 0, void 0, functi
                 iscommon: true,
             },
         });
-        if (!subjects) {
+        if (subjects.length === 0) {
             res.status(400).json({
                 message: "No Subjects Found",
             });
@@ -211,35 +212,41 @@ const getallsubjects = (req, res) => __awaiter(void 0, void 0, void 0, function*
 exports.getallsubjects = getallsubjects;
 const getSubjectsByYearId = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { yearid } = req.params;
-    if (!(yearid === null || yearid === void 0 ? void 0 : yearid.trim())) {
-        res.status(404).json({
-            message: "All fields are required"
+    if (!yearid || yearid.trim() === "") {
+        res.status(400).json({
+            message: "Year ID is required",
         });
         return;
     }
     const parsedYearId = parseInt(yearid);
+    if (isNaN(parsedYearId)) {
+        res.status(400).json({
+            message: "Year ID must be a valid number",
+        });
+        return;
+    }
     try {
         const subjects = yield prisma.subject.findMany({
             where: {
-                yearId: parsedYearId
-            }
+                yearId: parsedYearId,
+            },
         });
-        if (!subjects || subjects.length === 0) {
-            res.status(400).json({
-                message: "No subjects found"
+        if (subjects.length === 0) {
+            res.status(404).json({
+                message: "No subjects found",
             });
             return;
         }
         res.status(200).json({
             message: "Subjects found successfully",
-            subjects
+            subjects,
         });
     }
     catch (error) {
         const err = error;
         res.status(500).json({
-            message: "Internal server errror",
-            errror: err.message
+            message: "Internal server error",
+            error: err.message,
         });
     }
 });

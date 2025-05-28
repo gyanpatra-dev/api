@@ -6,14 +6,14 @@ import axios from "axios";
 const prisma = new PrismaClient();
 
 export const getsubjects = async (req: Request, res: Response) => {
-  const { yearId, branchname } = req.body;
+  const { yearId: rawYearId, branchname } = req.body;
+const yearId = Number(rawYearId);
 
-  if (!yearId || !branchname || yearId === "" || branchname === "") {
-    res.status(400).json({
-      message: "All Fields Are Required",
-    });
-    return;
-  }
+if (isNaN(yearId) || !branchname?.trim()) {
+  res.status(400).json({ message: "All fields are required" });
+  return;
+}
+
 
   try {
     const requireddata = await prisma.subject.findMany({
@@ -116,9 +116,11 @@ export const createSubject = async (req: Request, res: Response) => {
       newsubject,
     });
   } catch (error) {
-    message: "Filed";
-    error;
-    return;
+    const err = error as Error;
+    res.status(500).json({
+      message: "Failed to create subject",
+      error: err.message,
+    });
   }
 };
 
@@ -177,7 +179,7 @@ export const getCommonsubjects = async (req: Request, res: Response) => {
         iscommon: true,
       },
     });
-    if (!subjects) {
+    if (subjects.length === 0) {
       res.status(400).json({
         message: "No Subjects Found",
       });
@@ -219,38 +221,48 @@ export const getallsubjects = async(req:Request, res:Response)=>{
 }
 
 
-export const getSubjectsByYearId = async(req: Request,res: Response)=>{
-  const {yearid} = req.params
-  if(!yearid?.trim()){
-    res.status(404).json({
-      message: "All fields are required"
-    })
+export const getSubjectsByYearId = async (req: Request, res: Response) => {
+  const { yearid } = req.params;
+
+  if (!yearid || yearid.trim() === "") {
+    res.status(400).json({
+      message: "Year ID is required",
+    });
     return
   }
-  
-  const parsedYearId = parseInt(yearid)
+
+  const parsedYearId = parseInt(yearid);
+
+  if (isNaN(parsedYearId)) {
+   res.status(400).json({
+      message: "Year ID must be a valid number",
+    });
+    return 
+  }
+
   try {
     const subjects = await prisma.subject.findMany({
-      where:{
-        yearId:parsedYearId
-      }
-    })
-    if(!subjects || subjects.length === 0){
-      res.status(400).json({
-        message: "No subjects found"
+      where: {
+        yearId: parsedYearId,
+      },
+    });
 
-      })
+    if (subjects.length === 0) {
+      res.status(404).json({
+        message: "No subjects found",
+      });
       return
     }
+
     res.status(200).json({
       message: "Subjects found successfully",
-      subjects
-    })
+      subjects,
+    });
   } catch (error) {
-    const err = error as Error
+    const err = error as Error;
     res.status(500).json({
-      message: "Internal server errror",
-      errror:err.message
-    })
+      message: "Internal server error",
+      error: err.message,
+    });
   }
-}
+};
