@@ -13,34 +13,32 @@ exports.getallpyq = exports.getPyqById = exports.getpyq = exports.createmanypyq 
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const createpyq = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { subjectId, links, pyqname, pyqyear, pyqtype } = req.body;
-    if (!(subjectId === null || subjectId === void 0 ? void 0 : subjectId.trim()) ||
-        !(links === null || links === void 0 ? void 0 : links.trim()) ||
-        !(pyqname === null || pyqname === void 0 ? void 0 : pyqname.trim()) ||
-        !(pyqyear === null || pyqyear === void 0 ? void 0 : pyqyear.trim()) ||
-        !(pyqtype === null || pyqtype === void 0 ? void 0 : pyqtype.trim())) {
-        res.status(404).json({
-            message: "All fields are required xx",
-        });
-        return;
-    }
     try {
+        const { subjectId, links, pyqname, pyqyear, pyqtype } = req.body;
+        const parsedSubjectId = parseInt(subjectId);
+        if (isNaN(parsedSubjectId) ||
+            typeof links !== 'string' ||
+            typeof pyqname !== 'string' ||
+            typeof pyqyear !== 'string' ||
+            (pyqtype && typeof pyqtype !== 'string')) {
+            res.status(400).json({ message: "Invalid input types or missing fields" });
+            return;
+        }
         const newpyq = yield prisma.pyq.create({
             data: {
-                subjectId,
-                links,
-                pyqname,
-                pyqyear,
-                pyqtype,
+                subjectId: parsedSubjectId,
+                links: links.trim(),
+                pyqname: pyqname.trim(),
+                pyqyear: pyqyear.trim(),
+                pyqtype: (pyqtype === null || pyqtype === void 0 ? void 0 : pyqtype.trim()) || undefined, // optional if you want to use default
             },
         });
-        res.json({
-            pyq: newpyq,
-        });
+        res.status(201).json({ pyq: newpyq });
     }
     catch (error) {
-        res.json({
-            message: error,
+        console.error("Create PYQ Error:", error);
+        res.status(500).json({
+            message: error.message || "Server Error",
         });
     }
 });

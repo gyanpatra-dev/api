@@ -3,38 +3,40 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export const createpyq = async (req: Request, res: Response) => {
-  const { subjectId, links, pyqname, pyqyear, pyqtype } = req.body;
-  if (
-    !subjectId?.trim() ||
-    !links?.trim() ||
-    !pyqname?.trim() ||
-    !pyqyear?.trim() ||
-    !pyqtype?.trim()
-  ) {
-    res.status(404).json({
-      message: "All fields are required ",
-    });
-    return;
-  }
   try {
+    const { subjectId, links, pyqname, pyqyear, pyqtype } = req.body;
+
+    const parsedSubjectId = parseInt(subjectId);
+    if (
+      isNaN(parsedSubjectId) ||
+      typeof links !== 'string' ||
+      typeof pyqname !== 'string' ||
+      typeof pyqyear !== 'string' ||
+      (pyqtype && typeof pyqtype !== 'string')
+    ) {
+       res.status(400).json({ message: "Invalid input types or missing fields" });
+       return
+    }
+
     const newpyq = await prisma.pyq.create({
       data: {
-        subjectId,
-        links,
-        pyqname,
-        pyqyear,
-        pyqtype,
+        subjectId: parsedSubjectId,
+        links: links.trim(),
+        pyqname: pyqname.trim(),
+        pyqyear: pyqyear.trim(),
+        pyqtype: pyqtype?.trim() || undefined, // optional if you want to use default
       },
     });
-    res.json({
-      pyq: newpyq,
-    });
-  } catch (error) {
-    res.json({
-      message: error,
+
+    res.status(201).json({ pyq: newpyq });
+  } catch (error: any) {
+    console.error("Create PYQ Error:", error);
+    res.status(500).json({
+      message: error.message || "Server Error",
     });
   }
 };
+
 
 export const createmanypyq = async (req: Request, res: Response) => {
   const { pyqs } = req.body;
